@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Gabrielle Komaki",
+        "pfp": "./images/proFakePFP4.jpg",
+        "position": "CEO & Founder",
+        "summary": "With over 15 years of experience, Gabrielle excels at turning visionary concepts into inspiring realities."
+        },
+        {
+        "name": "Jayna Dower",
+        "pfp": "./images/proFakePFP2.jpg",
+        "position": "Architect",
+        "summary": "Licensed Architect with 7+ years of experience in skyscrapers and superstructures."
+        },
+        {
+        "name": "Mike Wazaki",
+        "pfp": "./images/proFakePFP3.jpg",
+        "position": "CFO",
+        "summary": "Effective financial analyst skilled in crafting informative financial models and adept in cost accounting."
+        },
+        {
+        "name": "Furina deVos",
+        "pfp": "./images/proFakePFP1.jpg",
+        "position": "Architect",
+        "summary": "An accomplished architect with over 2 decades of experience in the high-rise industry."
+        }
+]

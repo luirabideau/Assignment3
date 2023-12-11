@@ -1,0 +1,152 @@
+{
+"NewYork": [
+    {
+    "brand": "SalesForce Tower",
+    "price": 40.00,
+    "image": "./images/skyscraper1.jpg",
+    "description": "A 127 story skyscraper built for SalesForce.",
+    "date": "2024",
+    "aval": 10
+    },
+    {
+    "brand": "Bank of America Tower",
+    "price": 75.00,
+    "image": "./images/skyscraper2.jpg",
+    "description": "Allegedly the tallest tower in America.",
+    "date": "2023",
+    "aval": 10
+    },
+    {
+    "brand": "Skyscraper 37",
+    "price": 35.00,
+    "image": "./images/skyscraper3.jpg",
+    "description": "The 37th skyscraper built by the company.",
+    "date": "2022",
+    "aval": 10
+    },
+    {
+    "brand": "M-Tower",
+    "price": 30.00,
+    "image": "./images/skyscraper4.jpg",
+    "description": "No one knows exactly why it's called the M tower.",
+    "date": "2022",
+    "aval": 10
+    },
+    {
+    "brand": "White Towers",
+    "price": 45.00,
+    "image": "./images/skyscraper5.jpg",
+    "description": "The design came from a Turkish skyscraper which in turn came from a Japanese apartment building.",
+    "date": "2020",
+    "aval": 10
+    },
+    {
+    "brand": "Skyscraper 35",
+    "price": 65.00,
+    "image": "./images/skyscraper6.jpg",
+    "description": "The 35th skycraper built by the company.",
+    "date": "2019",
+    "aval": 10
+    }
+],
+"SanFran": [
+    {
+    "brand": "181 Fremont Street",
+    "price": 50.00,
+    "image": "./images/skyscraper7.jpg",
+    "description": "The design is based off the catheral in Lake Bled Slovenia.",
+    "date": "2018",
+    "aval": 10
+    },
+    {
+    "brand": "Skyscraper 44",
+    "price": 55.00,
+    "image": "./images/skyscraper8.jpg",
+    "description": "Proposed July 2023.",
+    "date": "proposed",
+    "aval": 10
+    },
+    {
+    "brand": "Infinity Tower",
+    "price": 86.00,
+    "image": "./images/skyscraper9.jpg",
+    "description": "The Plutonian Suite directly inspired this design.",
+    "date": "2019",
+    "aval": 10
+    },
+        {
+    "brand": "Two Siblings",
+    "price": 78.00,
+    "image": "./images/skyscraper10.jpg",
+    "description": "Designed to look like two siblings embracing.",
+    "date": "2020",
+    "aval": 10
+    },
+    {
+    "brand": "Northland Bank",
+    "price": 123.00,
+    "image": "./images/skyscraper11.jpg",
+    "description": "Commissoned by the Northland Bank.",
+    "date": "2023",
+    "aval": 10
+    },
+    {
+    "brand": "Kamisato Tower",
+    "price": 89.00,
+    "image": "./images/skyscraper12.jpg",
+    "description": "The headquarters of the Kamisato Corporation.",
+    "date": "2022",
+    "aval": 10
+    }
+],
+"Chicago": [
+    {
+    "brand": "Polaris",
+    "price": 90.00,
+    "image": "./images/skyscraper13.jpg",
+    "description": "A smaller project for the Quixing Trust.",
+    "date": "2019",
+    "aval": 10
+    },
+    {
+    "brand": "Skyscraper 26",
+    "price": 80.00,
+    "image": "./images/skyscraper14.jpg",
+    "description": "Proposed May 2023.",
+    "date": "proposed",
+    "aval": 10
+    },
+    {
+    "brand": "Tamani Hotel",
+    "price": 67.00,
+    "image": "./images/skyscraper15.jpg",
+    "description": "Inspired by the work of the late Anisa Tamani.",
+    "date": "2023",
+    "aval": 10
+    },
+    {
+    "brand": "Ontario Tower",
+    "price": 84.00,
+    "image": "./images/skyscraper16.jpg",
+    "description": "Located in downtown Chicago.",
+    "date": "2022",
+    "aval": 10
+    },
+    {
+    "brand": "Lillian Tower",
+    "price": 143.00,
+    "image": "./images/skyscraper17.jpg",
+    "description": "Commissoned in the memory of Lillian Patridge",
+    "date": "2021",
+    "aval": 10
+    },
+    {
+    "brand": "The Exchange",
+    "price": 59.00,
+    "image": "./images/skyscraper18.jpg",
+    "description": "Joint commisson by the Millilith and Favionious LLCs.",
+    "date": "2021",
+    "aval": 10
+    }
+]
+}
