@@ -134,7 +134,7 @@ function productsPage(){
                 <div class="product-avaliability">Product Avaliability: ${products[i].aval}</div>
                 <label id="quantity${i}_label"}">Quantity:</label>
                 <div style="color: blue;" id="active_error${i}"></div>
-                <input type="text" paceholder="0" id="textBox${i}" name="quantity${i}";"> <label id="quantity${i}_label"}">In cart:</label> 
+                <input type="text" paceholder="0" id="textBox${i}" name="quantity${i}";"> <label id="quantity${i}_cart_label"}">In cart: ${shopping_cart[prod_key]['quantity'+ (i)]}</label> 
                 <div style="color: red;" id="error_message${i}"></div>
             </div>
             <div class="product-item">
@@ -145,7 +145,7 @@ function productsPage(){
                 <div class="product-avaliability">Product Avaliability: ${products[i+1].aval}</div>
                 <label id="quantity${i+1}_label"}">Quantity:</label>
                 <div style="color: blue;" id="active_error${i+1}"></div>
-                <input type="text" paceholder="0" id="textBox${i+1}" name="quantity${i+1}";"> <label id="quantity${i}_label"}">In cart:</label> 
+                <input type="text" paceholder="0" id="textBox${i+1}" name="quantity${i+1}";"> <label id="quantity${i+1}_cart_label"}">In cart: ${shopping_cart[prod_key]['quantity'+ (i+1)]}</label> 
                 <div style="color: red;" id="error_message${i+1}"></div>
             </div>
           </div>

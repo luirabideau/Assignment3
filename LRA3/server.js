@@ -39,6 +39,12 @@ app.all('*', function (request, response, next) {
    // gives the user a cart if the user does not have one
    if (typeof request.session.cart == 'undefined'){
       request.session.cart = {};
+      for(let prod_key in all_products){
+         request.session.cart[prod_key] = {};
+         for (let i in all_products[prod_key]){
+            request.session.cart[prod_key]['quantity'+i] = 0;
+         }
+      }
    }
    //if (typeof request.session.users == 'undefined'){
      // request.session.users = Object.keys(status).length;
@@ -57,6 +63,14 @@ app.get('/products.js', function(request, response, next){
    let products_str = `let all_products = ${JSON.stringify(all_products)}`;
    // sends the string
    response.send(products_str);
+});
+
+// sending back the cart 
+app.post('/get_cart', function(request, response, next){
+   // the response will be json
+   response.type('json');
+   // turning the cart into a JSON string and sending it
+   response.send(JSON.stringify(request.session.cart));
 });
 
 // process a route for the professionals.json stuff
@@ -90,7 +104,6 @@ app.get('/userLoggedin.js', function(request, response, next){
 let qs;
 // process purchase request (validate quantities, check quantity available)
 app.post('/process_purchase', function (request, response, next){
-   user_quantity_data = request.query; // save for later
    let prod_key = request.body['location'];
    let products = all_products[prod_key];
    // get the quantity data
@@ -122,16 +135,20 @@ app.post('/process_purchase', function (request, response, next){
       // if valid, send info to invoice
       qs = querystring.stringify(request.body);
       if (Object.entries(errors).length === 0) {
+        // Move to just before the purchase is complete 
       //remove quantities from products.aval
-      for(let i in products){
-            products[i].aval -= request.body[`quantity${i}`];
-         }
+ //     for(let i in products){
+   //         products[i].aval -= request.body[`quantity${i}`];
+     //    }
          // add purchases to session cart
-         request.session.cart[request.query.prod_key] = {};
-         for (i in products) {
-            if (user_quantity_data[`quantity${i}`] != 'undefined') {
-               request.session.cart[request.query.prod_key][`quanitity${i}`] = user_quantity_data[`quantity${i}`];
+         if(typeof request.session.cart[prod_key] === 'undefined'){
+            request.session.cart[prod_key] = {};
+         }
+         for (let i in products) {
+            if (typeof request.session.cart[prod_key][`quantity${i}`] != 'undefined') {
+               request.session.cart[prod_key][`quantity${i}`] = 0;
             }
+            request.session.cart[prod_key][`quantity${i}`] += Number(request.body[`quantity${i}`]);
          }
          // sending to invoice
          response.redirect(`./products${prod_key}.html`)

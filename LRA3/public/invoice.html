@@ -13,6 +13,7 @@
 <script src="./functions.js"></script>
 <script>headDeclarations()</script>
 <script>
+  /*
 // This function asks the server for a "service" and converts the response to text. 
   function loadJSON(service, callback) {   
       let xobj = new XMLHttpRequest();
@@ -26,6 +27,7 @@
       };
       xobj.send(null);  
    }
+   */
   </script>
 </head>
 <body>
@@ -42,6 +44,7 @@
         <div id="currentDateContainer"></div>
 <!-- Interpretting the query string -->
 <script>
+  /*
   // get the shopping cart data for this user
   loadJSON('get_cart', function (response) {
             // Parsing JSON string into object
@@ -57,6 +60,7 @@ for (let prod_key in shopping_cart) {
     a_qty = shopping_cart[prod_key][`quantity${i}`];
   }
 }
+*/
   //Subtotal
   let subtotal = 0;
   // Function to get the current date in the format YYYY-MM-DD
