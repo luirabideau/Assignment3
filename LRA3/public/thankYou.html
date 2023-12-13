@@ -10,17 +10,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
 <script src="./functions.js"></script>
-<script>faviconInfo()</script>
+<script>
+    faviconInfo();
+  let hasCookie = getCookie("invoice");
+  //if (!checkCookie(hasCookie)) {
+  //  alert("Please Login First.");
+  //  window.location.href = "/login.html"; // redirect to an error page
+  //}
+    let cookieName = getCookie("name");//Function that gets name cookie
+</script>
 </head>
 <body>
 <!-- Navbar -->
-<script>navBar()</script>
+<script>
+    navBar();
+</script>
 <br><br><br><br>
     <!-- Page content -->
     <div class="w3-content w3-padding content" style="max-width:1564px">
         <script>
-            document.write(`<p>User: ${cookieName}</p>`);
-          </script>
+            document.write(`<p style="text-align: center">Thank you ${cookieName}!</p>`);
+        </script>
     </div>
 </body>
+<script>
+    document.cookie = "cfsc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "invoice=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+</script>
 </html>

@@ -14,6 +14,12 @@
 <link rel="stylesheet" href="./css/invoice.css">
 <script>faviconInfo()</script>
 <script>
+  let neededCookie = getCookie("cfsc");
+  if (!checkCookie(neededCookie)) {
+    //alert("Please Login First.");
+    //window.location.href = "/login.html"; // redirect to an error page
+    console.log(`${neededCookie}`);
+  }
   let subtotal = 0;//Subtotal
   let cookieName = getCookie("name");//Function that gets name cookie
   let date = getCurrentDate();// Function to get the current date in the format YYYY-MM-DD

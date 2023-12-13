@@ -10,7 +10,26 @@ function faviconInfo(){//contains favicon and css information
       <link rel="shortcut icon" href="./images/letterR.png" type="image/png">
     `)
 }
+
 function navBar(){// Makes a navbar
+  let isloggedin = getCookie("loggedIn");
+  if(isloggedin == 1){
+    document.write(`
+    <div class="w3-top">
+    <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+     <a href="./index.html" class="w3-bar-item w3-button"><b>Ryer</b> Architects</a>
+     <!-- Float links to the right. Hide them on small screens -->
+     <div class="w3-right w3-hide-small">
+       <a href="./products.html?location=NewYork" class="w3-bar-item w3-button">New York</a>
+       <a href="./products.html?location=SanFran" class="w3-bar-item w3-button">San Francisco</a>
+       <a href="./products.html?location=Chicago" class="w3-bar-item w3-button">Chicago</a>
+       <a href="./team.html" class="w3-bar-item w3-button">Our Team</a>
+       <a href="#" class="w3-bar-item w3-button" onclick="logout()">Log Out</a>
+     </div>
+    </div>
+   </div>
+   `);
+  } else {
     document.write(`
     <div class="w3-top">
     <div class="w3-bar w3-white w3-wide w3-padding w3-card">
@@ -26,6 +45,41 @@ function navBar(){// Makes a navbar
     </div>
    </div>
    `);
+  }
+}
+
+function getCurrentDate() {// Function to get the current date in the format YYYY-MM-DD
+    // Function from ChatGPT using the "make me a function that gets todays date using javascript" prompt
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function generateRandomPassword(length){// Generate password function from CHATGPT, used prompt "recommend password function in textbox javascript and html"
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?/{}[]";
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset.charAt(randomIndex);
+    }
+    return password;
+}
+
+function generatePassword(){// Used in conjunction with the function above. This function is called at the click of a button and it takes the value of the generatePassword function and returns it to a specificied elementID
+  const passwordField = document.getElementById("password");
+  const generatedPassword = generateRandomPassword(10); // Change the length as needed
+  passwordField.value = generatedPassword;
+}
+
+function logout() {// deletes the logged in cookie and reloads the page
+  // Deletes all cookies
+  document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  // Reload the current page
+  location.reload();
 }
 
 /*---------------------------------- PRODUCTS PAGE SPECIFIC FUNCTIONS ----------------------------------*/
@@ -170,31 +224,7 @@ function teamTable(){// Function that generates the professionals information on
     };
 }
 
-/*-------------------------------------- OTHER GENERAL FUNCTIONS ---------------------------------------*/
-function getCurrentDate() {// Function to get the current date in the format YYYY-MM-DD
-    // Function from ChatGPT using the "make me a function that gets todays date using javascript" prompt
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
 
-function generateRandomPassword(length){// Generate password function from CHATGPT, used prompt "recommend password function in textbox javascript and html"
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?/{}[]";
-    let password = "";
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset.charAt(randomIndex);
-    }
-    return password;
-}
-
-function generatePassword(){// Used in conjunction with the function above. This function is called at the click of a button and it takes the value of the generatePassword function and returns it to a specificied elementID
-  const passwordField = document.getElementById("password");
-  const generatedPassword = generateRandomPassword(10); // Change the length as needed
-  passwordField.value = generatedPassword;
-}
 
 /*----------------------------------------- COOKIE FUNCTIONs -------------------------------------------*/
  
@@ -216,6 +246,17 @@ function getCookie(name){// Function to get the value of a cookie by name
         }
     }
     return null;
+}
+
+function checkCookie(cookieName) {// Function to check if a cookie exists
+  var cookies = document.cookie.split(';');
+  for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.indexOf(cookieName + "=") === 0) {
+          return true; // Cookie found
+      }
+  }
+  return false; // Cookie not found
 }
 
 // Example: Get the value of the "username" cookie

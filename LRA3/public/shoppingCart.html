@@ -11,7 +11,7 @@
 <!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
 <link rel="stylesheet" href="./css/invoice.css">
 <script src="./functions.js"></script>
-<script>faviconInfo()</script>
+<script>faviconInfo();</script>
 <script>
   let cookieName = getCookie("name");//Function that gets name cookie
 </script>
@@ -59,7 +59,7 @@ loadJSON('get_cart', function (response) {
     </table>
   <!-- table end -->
   </div>
-  <p><form action="./processInvoice" method="POST">
+  <p><form action="./processToInvoice" method="post">
     <input type="submit" id="invoice" value="Checkout">
   </form></p>
 </div>  
