@@ -180,9 +180,9 @@ app.post('/login', function (request, response){// Validates a users login, and 
     if(typeof user_reg_data[the_username] !== 'undefined'){// check if username is in user_data
        if(user_reg_data[the_username].password === the_password){// check if the password matches the password in user_reg_data
           console.log(`${the_username} is logged in!`);
-          response.cookie("username", the_username, {expire: Date.now() + 5*1000});// send a username cookie to indicate logged in
-          response.cookie("name", user_reg_data[the_username].name, {expire: Date.now() + 5*1000});// make a name cookie
-          response.cookie("loggedIn", X, {expire: Date.now() + 5*1000});// make a logged in cookie
+          response.cookie("username", the_username, {expire: Date.now() + 30 * 60 * 1000});// send a username cookie to indicate logged in
+          response.cookie("name", user_reg_data[the_username].name, {expire: Date.now() + 30 * 60 * 1000});// make a name cookie
+          response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
           userLoggedin[the_username] = true;
           response.redirect(`./shoppingCart.html`);
        } else {
@@ -213,58 +213,28 @@ app.post("/get_cart", function (request, response){
     response.json(request.session.cart);
 });    
 
-app.post('/processToInvoice', function (request, response){// Validates that at least 1 item is being bought, and then sends user to the invoice page
-   let neededCookie = getCookie("loggedIn");
-   if(!checkCookie(neededCookie)){
-      response.redirect(`./login.html`);
-   }else{
-      response.cookie("cfsc", 1, {expire: Date.now() + 5*1000});// make a came-from-shopping-cart cookie
+app.post('/processToInvoice', function (request, response){// Validates that at least 1 item is being bought, and then sends user to the invoice page if they are logged in
+//      response.cookie("cfsc", 1, {expire: Date.now() + 30 * 60 * 1000});// make a came-from-shopping-cart cookie
       response.redirect(`./invoice.html`);
-   };
 });
 
-app.get('/finalizePurchase', function (request, response){// Sends the email and then sends user to the thank you page
+app.post('/finalizePurchase', function (request, response){// Sends the email and then sends user to the thank you page
    response.cookie("invoice", 1, {expire: Date.now() + 5*1000});// make a came from invoice cookie
    response.redirect(`./thankYou.html`);
 });
 
 app.get('/logout', function(request, response){
    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+   document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+   document.cookie = "loggenIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+   document.cookie = "cfsc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
    response.redirect(back);
 });
 // ----------------- Sepcific Routing End --------------- //
 // ---------------- Cookie Functions Begin -------------- //
 
-function setCookie(name, value, daysToLive){// Function to set a cookie
-    var expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + daysToLive);
-    var cookie = name + "=" + encodeURIComponent(value) + "; expires=" + expirationDate.toUTCString() + "; path=/";
-    document.cookie = cookie;
-}
 // Example: Set a cookie named "username" with the value "John Doe" that expires in 7 days
 // setCookie("username", "John Doe", 7);
-
-function getCookie(name){// Function to get the value of a cookie by name
-    let cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i].trim();
-        if (cookie.indexOf(name + "=") === 0) {
-            return decodeURIComponent(cookie.substring(name.length + 1));
-        }
-    }
-    return null;
-}
-
-function checkCookie(cookieName) {// Function to check if a cookie exists
-  var cookies = document.cookie.split(';');
-  for (var i = 0; i < cookies.length; i++) {
-      var cookie = cookies[i].trim();
-      if (cookie.indexOf(cookieName + "=") === 0) {
-          return true; // Cookie found
-      }
-  }
-  return false; // Cookie not found
-}
 
 // Example: Get the value of the "username" cookie
 //var username = getCookie("username");

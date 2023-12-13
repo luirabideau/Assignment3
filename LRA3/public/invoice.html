@@ -14,11 +14,12 @@
 <link rel="stylesheet" href="./css/invoice.css">
 <script>faviconInfo()</script>
 <script>
-  let neededCookie = getCookie("cfsc");
-  if (!checkCookie(neededCookie)) {
+  if (!checkCookie('cfsc')) {
+    let what = checkCookie('cfsc');
+    console.log(`${what}`);
     //alert("Please Login First.");
     //window.location.href = "/login.html"; // redirect to an error page
-    console.log(`${neededCookie}`);
+    console.log(`${'cfsc'}`);
   }
   let subtotal = 0;//Subtotal
   let cookieName = getCookie("name");//Function that gets name cookie
@@ -97,14 +98,20 @@
       </table>
       <!-- table end -->
     </div>
-    <p><form action="./finalizePurchase" method="GET">
-      <input type="submit" id="purchase" value="Purchase and Continue">
-    </form></p>
     <!-- Shipping Policy details -->
       <p style="font-weight: bold;">SHIPPING POLICY IS:</p>
       <p>Subtotals under or equal to $100 will be charged shipping equal to 5% of the subtotal amount</p>
       <p>Subtotals over $100 will be charged shipping equal to 10% of the subtotal amount</p>
       <p>Girl math states that any subtotal under or equal to $100 is hereby 5% off</p>
+
+      <h3>Shipping Information</h3>
+      <form action="./finalizePurchase" method="post">
+        <p><label for="address">Address Line 2:</label>
+          <input type="text" id="address1" name="address1" required></p>
+        <p><label for="address">Address Line 2:</label>
+          <input type="text" id="address2" name="address2" required></p>
+        <p><input type="submit" id="purchase" value="Purchase and Continue"></p>
+      </form>
   </div>
 </body>
 </html>
