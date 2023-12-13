@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="./css/invoice.css">
 <script src="./functions.js"></script>
 <script>faviconInfo()</script>
+<script>
+  let cookieName = getCookie("name");//Function that gets name cookie
+</script>
 </head>
 <body>
 <!-- Navbar -->
@@ -21,17 +24,20 @@
 <script>
 // get the shopping cart data for this user
 loadJSON('get_cart', function (response) {
-          // Parsing JSON string into object
-          shopping_cart = JSON.parse(response);
-          for (prod_key in shopping_cart) {
-              total += shopping_cart[prod_key].reduce((a, b) => a + b);
-          }
-      });
+  // Parsing JSON string into object
+  shopping_cart = JSON.parse(response);
+  for (prod_key in shopping_cart) {
+    total += shopping_cart[prod_key].reduce((a, b) => a + b);
+  }
+});
 </script>
 <!-- Content -->
 <div class="invoice">
   <div class="invoice-header">
     <h2>Cart</h2>
+    <script>
+      document.write(`<p>User: ${cookieName}</p>`);
+    </script>
   </div>
   <!-- the actual invoice -->
   <div class="invoice-body">
@@ -53,7 +59,7 @@ loadJSON('get_cart', function (response) {
     </table>
   <!-- table end -->
   </div>
-  <p><form action="./processInvoice" method="GET">
+  <p><form action="./processInvoice" method="POST">
     <input type="submit" id="invoice" value="Checkout">
   </form></p>
 </div>  

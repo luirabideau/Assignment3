@@ -197,7 +197,7 @@ function generatePassword(){// Used in conjunction with the function above. This
 }
 
 /*----------------------------------------- COOKIE FUNCTIONs -------------------------------------------*/
-/* 
+ 
 function setCookie(name, value, daysToLive){// Function to set a cookie
     var expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + daysToLive);
@@ -219,7 +219,7 @@ function getCookie(name){// Function to get the value of a cookie by name
 }
 
 // Example: Get the value of the "username" cookie
-var username = getCookie("username");
-console.log("Username: " + username);
-*/
+//var username = getCookie("username");
+//console.log("Username: " + username);
+
 /*------------------------------------------------------------------------------------------------------*/

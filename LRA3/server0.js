@@ -47,10 +47,12 @@ app.all('*', function (request, response, next){
    next();
 });
 
+// process a route for invoice
+
+
 // process a route for the products.json stuff
 const all_products = require(__dirname + "/products.json");
-// making a products array within the server
-app.get('/products.js', function(request, response, next){
+app.get('/products.js', function(request, response, next){// making a products array within the server
    // the response will be js
    response.type('.js');
    // turning stuff into a string
@@ -61,8 +63,7 @@ app.get('/products.js', function(request, response, next){
 
 // process a route for the professionals.json stuff
 professionals = require(__dirname + "/professionals.json");
-// making a professionals array within the server
-app.get('/professionals.js', function(request, response, next){
+app.get('/professionals.js', function(request, response, next){// making a professionals array within the server
    // the response will be js
    response.type('.js');
    // turning stuff into a string
@@ -71,15 +72,14 @@ app.get('/professionals.js', function(request, response, next){
    response.send(professionals_str);
 });
 
-// making a userInfo array within the server
-app.get('/userLoggedin.js', function(request, response, next){
+app.get('/userLoggedin.js', function(request, response, next){// making a userInfo array within the server
     // the response will be js
     response.type('.js');
     // turning stuff into a string
     let userLoggedin_str = `let userLoggedin = ${JSON.stringify(userLoggedin)}`;
     // sends the string
     response.send(userLoggedin_str);
- });
+});
 
 // sending back the cart 
 app.post('/get_cart', function(request, response, next){
@@ -87,10 +87,11 @@ app.post('/get_cart', function(request, response, next){
     response.type('json');
     // turning the cart into a JSON string and sending it
     response.send(JSON.stringify(request.session.cart));
- });
+});
+
 // ----------------- General Routing End ---------------- //
 
-// --- Route all other GET requests to files in public -- //
+// --- Route all other requests to files in public -- //
 app.use(express.static(__dirname + '/public'));
 // start server
 app.listen(8080, () => console.log(`listening on port 8080`));
@@ -119,15 +120,69 @@ function validateQuantities(quantities, returnErrors){// the isNonNegInt functio
 // ----------------- Functions End ---------------------- //
 
 // --------------- Specific Routing Begin --------------- //
-app.post('/login', function (request, response){
+
+app.post('/add_to_cart', function (request, response, next){// process purchase request (validate quantities, check quantity available)
+   // determining what location the data was from
+   let prod_key = request.body['location'];
+   let products = all_products[prod_key];
+   // getting and validating the quantity data
+   let noInput = 0; // defined a variable to keep track of how many products have 0 or empty quanities
+   let errors = {}; // assume no errors to begin with
+   for (let i in products){ 
+      let q = request.body[`quantity${i}`];
+      // validate the quantities
+      if (validateQuantities(q, false) == false){
+         errors[`error_quantity${i}`] = validateQuantities(q, true);
+      }
+      // Check if there is enough avaliable, if not send error
+      if(q > products[i].aval){
+         errors[`error_quantity${i}`] = `There are not ${q} avaliable.`
+      }
+      // did the user select any item
+      if((request.body[`quantity${i}`]) == 0 || (request.body[`quantity${i}`]) === ''){
+         // if the quantity is 0 or empty, adds 1 to the noInput variable
+         noInput++;
+      } 
+   };
+   // this checks if all the product quantities were either 0 or empty
+   if(noInput == products.length){
+      //sends the error back to the page
+         response.redirect(`./products.html?${prod_key}&error=NoInput`);
+   }else{
+      // if valid, send info to invoice
+      qs = querystring.stringify(request.body);
+      if (Object.entries(errors).length === 0) {
+         // add purchases to session cart
+         if(typeof request.session.cart[prod_key] === 'undefined'){
+            request.session.cart[prod_key] = {};
+         }
+         for (let i in products) {
+            if (typeof request.session.cart[prod_key][`quantity${i}`] != 'undefined') {
+               request.session.cart[prod_key][`quantity${i}`] = 0;
+            }
+            request.session.cart[prod_key][`quantity${i}`] += Number(request.body[`quantity${i}`]);
+         }
+         // sending to invoice
+         response.redirect(`./products.html?location=${prod_key}`)
+      }
+      // if invalid, redisplay products but with errors
+      else{ 
+         response.redirect(`./products.html?location=${prod_key}&${querystring.stringify(errors)}`);
+         
+      }
+   }
+});
+
+app.post('/login', function (request, response){// Validates a users login, and redirects page to the page if invalid and to cart if valid
     // Process login form POST and redirect to logged in page if ok, back to login page if not
     let the_username = request.body.username.toLowerCase();
     let the_password = request.body.password;
     if(typeof user_reg_data[the_username] !== 'undefined'){// check if username is in user_data
        if(user_reg_data[the_username].password === the_password){// check if the password matches the password in user_reg_data
           console.log(`${the_username} is logged in!`);
-          // send a username cookie to indicate logged in
-          response.cookie("username", the_username, {expire: Date.now() + 5*1000});
+          response.cookie("username", the_username, {expire: Date.now() + 5*1000});// send a username cookie to indicate logged in
+          response.cookie("name", user_reg_data[the_username].name, {expire: Date.now() + 5*1000});// make a name cookie
+          response.cookie("loggedIn", 1, {expire: Date.now() + 5*1000});// make a logged in cookie
           userLoggedin[the_username] = true;
           response.redirect(`./shoppingCart.html`);
        } else {
@@ -138,9 +193,7 @@ app.post('/login', function (request, response){
     }
 });
 
-app.post('/register', function (request, response){
-    // process a simple register form
-    //make a new user
+app.post('/register', function (request, response){// Makes a new user while validating that info, then sends the new user to the shopping cart
     let username = request.body.username.toLowerCase();
     user_reg_data[username] = {};
     user_reg_data[username].password = request.body.password;
@@ -148,16 +201,9 @@ app.post('/register', function (request, response){
     // add it to the user_data.json
     fs.writeFileSync(user_data_filename, JSON.stringify(user_reg_data));
     if(typeof user_reg_data[username] !== 'undefined' && typeof user_reg_data[username].password !== 'undefined' && typeof user_reg_data[username].username !== 'undefined'){
-       //remove quantities from products.aval
-       /*for(let i in products){
-          if(qs.has(`quantity${i}`)){
-             qs4 = qs.get(`quantity${i}`);
-             products[i].aval -= qs4;
-          };
-       };*/
        // add new logged in user, place above the redirect
        userLoggedin[username] = true; 
-       response.redirect(`./invoice.html?${qs}&email=${username}&name=${user_reg_data[username].name}&numUsersLoggin=${Object.entries(userLoggedin).length}`);   
+       response.redirect(`./shoppingCart.html`);   
     } else {
        response.redirect(`./register.html`)
     }
@@ -166,6 +212,14 @@ app.post('/register', function (request, response){
 app.post("/get_cart", function (request, response){
     response.json(request.session.cart);
 });    
+
+app.post('/processInvoice', function (request, response){// Validates that at least 1 item is being bought, and then sends user to the invoice page
+   response.redirect(`./invoice.html`);
+});
+
+app.get('/finalizePurchase', function (request, response){// Sends the email and then sends user to the thank you page
+   response.redirect(`./thankYou.html`);
+});
 
 // ----------------- Sepcific Routing End --------------- //
 // ---------------- Cookie Functions Begin -------------- //

@@ -11,3 +11,12 @@
 //};
 
 //${shopping_cart[prod_key]['quantity'+ (i+1)]}
+
+
+       //remove quantities from products.aval
+       /*for(let i in products){
+          if(qs.has(`quantity${i}`)){
+             qs4 = qs.get(`quantity${i}`);
+             products[i].aval -= qs4;
+          };
+       };*/

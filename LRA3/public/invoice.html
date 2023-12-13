@@ -14,6 +14,9 @@
 <link rel="stylesheet" href="./css/invoice.css">
 <script>faviconInfo()</script>
 <script>
+  let subtotal = 0;//Subtotal
+  let cookieName = getCookie("name");//Function that gets name cookie
+  let date = getCurrentDate();// Function to get the current date in the format YYYY-MM-DD
      // get the shopping cart data for this user
   loadJSON('get_cart', function (response) {
             // Parsing JSON string into object
@@ -26,25 +29,15 @@
 </head>
 <body>
 <!-- Navbar -->
-<script>navBar()</script>
+<script>navBar();</script>
 <br><br><br><br>
   <!-- Content -->
   <div class="invoice">
     <div class="invoice-header">
       <h2>Invoice</h2>
       <script>
-          document.write(`<p>Hello ${user_reg_data[username].name}</p>`);
+          document.write(`<p>Hello ${cookieName}</p><div id="currentDateContainer">${date}</div>`);
       </script>
-        <div id="currentDateContainer"></div>
-    <!-- Interpretting the query string -->
-    <script>  
-        //Subtotal
-        let subtotal = 0;
-        // Function to get the current date in the format YYYY-MM-DD
-        getCurrentDate()
-        // Update HTML content with the current date
-        document.getElementById('currentDateContainer').innerText = `Current Date: ${getCurrentDate()}`; 
-    </script>
     </div>
     <!-- the actual invoice -->
     <div class="invoice-body">
@@ -98,7 +91,9 @@
       </table>
       <!-- table end -->
     </div>
-      <p><a href="./thankYou.html">continue</a></p>
+    <p><form action="./finalizePurchase" method="GET">
+      <input type="submit" id="purchase" value="Purchase and Continue">
+    </form></p>
     <!-- Shipping Policy details -->
       <p style="font-weight: bold;">SHIPPING POLICY IS:</p>
       <p>Subtotals under or equal to $100 will be charged shipping equal to 5% of the subtotal amount</p>
