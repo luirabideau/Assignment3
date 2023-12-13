@@ -101,13 +101,12 @@ app.get('/userLoggedin.js', function(request, response, next){
    //products.forEach((products, i) => {products.qty_sold = 0});
 //};
 
-let qs;
 // process purchase request (validate quantities, check quantity available)
-app.post('/process_purchase', function (request, response, next){
+app.post('/add_to_cart', function (request, response, next){
+   // determining what location the data was from
    let prod_key = request.body['location'];
    let products = all_products[prod_key];
-   // get the quantity data
-   // validate the quantity data
+   // getting and validating the quantity data
    let noInput = 0; // defined a variable to keep track of how many products have 0 or empty quanities
    let errors = {}; // assume no errors to begin with
    for (let i in products){ 
@@ -116,7 +115,6 @@ app.post('/process_purchase', function (request, response, next){
       if (validateQuantities(q, false) == false){
          errors[`error_quantity${i}`] = validateQuantities(q, true);
       }
-      // the serverside part of IR3
       // Check if there is enough avaliable, if not send error
       if(q > products[i].aval){
          errors[`error_quantity${i}`] = `There are not ${q} avaliable.`
@@ -130,16 +128,11 @@ app.post('/process_purchase', function (request, response, next){
    // this checks if all the product quantities were either 0 or empty
    if(noInput == products.length){
       //sends the error back to the page
-         response.redirect(`./products${prod_key}.html?NoInput`);
+         response.redirect(`./products.html?${prod_key}&error=NoInput`);
    }else{
       // if valid, send info to invoice
       qs = querystring.stringify(request.body);
       if (Object.entries(errors).length === 0) {
-        // Move to just before the purchase is complete 
-      //remove quantities from products.aval
- //     for(let i in products){
-   //         products[i].aval -= request.body[`quantity${i}`];
-     //    }
          // add purchases to session cart
          if(typeof request.session.cart[prod_key] === 'undefined'){
             request.session.cart[prod_key] = {};
@@ -151,11 +144,11 @@ app.post('/process_purchase', function (request, response, next){
             request.session.cart[prod_key][`quantity${i}`] += Number(request.body[`quantity${i}`]);
          }
          // sending to invoice
-         response.redirect(`./products${prod_key}.html`)
+         response.redirect(`./products.html?location=${prod_key}`)
       }
       // if invalid, redisplay products but with errors
       else{ 
-         response.redirect(`./products${prod_key}.html?NoInput`);
+         response.redirect(`./products.html?location=${prod_key}&${querystring.stringify(errors)}`);
          
       }
    }
@@ -163,7 +156,7 @@ app.post('/process_purchase', function (request, response, next){
 
 
 // route all other GET requests to files in public 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public1'));
 // start server
 app.listen(8080, () => console.log(`listening on port 8080`));
 

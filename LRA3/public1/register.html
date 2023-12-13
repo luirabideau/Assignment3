@@ -1,0 +1,42 @@
+<!-- Created by Lui Rabideau on 12/5/2023 -->
+<!-- Design from W3schools: W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes -->
+<!-- (https://www.w3schools.com/w3css/tryw3css_templates_architect.htm) -->
+<!-- UHM ITM352 Assignment 2 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
+    <script src="./functions.js"></script>
+    <script>headDeclarations()</script>
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <script>navBar()</script>
+  <br><br><br><br><br>
+  <!-- Header -->
+    <div class="login-container">
+        <h2>Registration</h2>
+        <form action="./register" method="post">
+            <label for="firstname">First Name:</label>
+            <input type="text" id="firstname" name="firstname" required>
+    
+            <label for="lastname">Last Name:</label>
+            <input type="text" id="lastname" name="lastname" required>
+            
+            <label for="username">Email:</label>
+            <input type="text" id="username" name="username" required>
+    
+            <label for="password">Password:</label>
+            <input type="text" id="password" name="password" required>
+            <p style="text-align: center;">
+                <button id="generateBtn" onclick="generatePassword()">Generate Password</button>
+            </p>
+            <p style="text-align: center;"><button type="submit">Login</button></p>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,33 +1,39 @@
-<!------------------ Created by Lui Rabideau, due on 12/15/2023 ---------------------->
+<!-- Created by Lui Rabideau, due 12/15/2023 -->
 <!-- Design from W3schools: W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes -->
-<!-------- (https://www.w3schools.com/w3css/tryw3css_templates_architect.htm) -------->
-<!----------------------------- UHM ITM352 Assignment 3 ------------------------------>
+<!-- (https://www.w3schools.com/w3css/tryw3css_templates_architect.htm) -->
+<!-- UHM ITM352 Assignment 3 -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Invoice</title>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice</title>
 <!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
-<script src="./functions.js"></script>
-<script src="./products.js"></script>
 <link rel="stylesheet" href="./css/invoice.css">
-<script>faviconInfo()</script>
+<script src="./functions.js"></script>
+<script>headDeclarations()</script>
 <script>
-     // get the shopping cart data for this user
-  loadJSON('get_cart', function (response) {
-            // Parsing JSON string into object
-            shopping_cart = JSON.parse(response);
-            for (prod_key in shopping_cart) {
-                total += shopping_cart[prod_key].reduce((a, b) => a + b);
+  /*
+// This function asks the server for a "service" and converts the response to text. 
+  function loadJSON(service, callback) {   
+      let xobj = new XMLHttpRequest();
+      xobj.overrideMimeType("application/json");
+      xobj.open('POST', service, false);
+      xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+              // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+              callback(xobj.responseText);
             }
-        });
-</script>
+      };
+      xobj.send(null);  
+   }
+   */
+  </script>
 </head>
 <body>
-<!-- Navbar -->
-<script>navBar()</script>
-<br><br><br><br>
+  <!-- Navbar -->
+  <script>navBar()</script>
+  <br><br><br><br>
   <!-- Content -->
   <div class="invoice">
     <div class="invoice-header">
@@ -36,15 +42,32 @@
         invoicePersonalization()
       </script>
         <div id="currentDateContainer"></div>
-    <!-- Interpretting the query string -->
-    <script>  
-        //Subtotal
-        let subtotal = 0;
-        // Function to get the current date in the format YYYY-MM-DD
-        getCurrentDate()
-        // Update HTML content with the current date
-        document.getElementById('currentDateContainer').innerText = `Current Date: ${getCurrentDate()}`; 
-    </script>
+<!-- Interpretting the query string -->
+<script>
+  /*
+  // get the shopping cart data for this user
+  loadJSON('get_cart', function (response) {
+            // Parsing JSON string into object
+            shopping_cart = JSON.parse(response);
+            for (prod_key in shopping_cart) {
+                total += shopping_cart[prod_key].reduce((a, b) => a + b);
+            }
+        });
+// form was submitted so process the invoice
+for (let prod_key in shopping_cart) {
+  let products = all_products[prod_key];
+  for (let i in products) {
+    a_qty = shopping_cart[prod_key][`quantity${i}`];
+  }
+}
+*/
+  //Subtotal
+  let subtotal = 0;
+  // Function to get the current date in the format YYYY-MM-DD
+  getCurrentDate()
+  // Update HTML content with the current date
+  document.getElementById('currentDateContainer').innerText = `Current Date: ${getCurrentDate()}`;
+</script>
     </div>
     <!-- the actual invoice -->
     <div class="invoice-body">
@@ -98,12 +121,13 @@
       </table>
       <!-- table end -->
     </div>
-      <p><a href="./thankYou.html">continue</a></p>
+      <p><a href="./thankyouPage.html">continue</a></p>
     <!-- Shipping Policy details -->
       <p style="font-weight: bold;">SHIPPING POLICY IS:</p>
       <p>Subtotals under or equal to $100 will be charged shipping equal to 5% of the subtotal amount</p>
       <p>Subtotals over $100 will be charged shipping equal to 10% of the subtotal amount</p>
       <p>Girl math states that any subtotal under or equal to $100 is hereby 5% off</p>
+      
   </div>
 </body>
 </html>

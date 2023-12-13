@@ -1,0 +1,13 @@
+// Move to just before the purchase is complete 
+//remove quantities from products.aval
+    for(let i in products){
+        products[i].aval -= request.body[`quantity${i}`];
+    }
+
+    // this is a part of IR1
+//qty_sold variable for each product, this is added into server memory
+//for (let i in products) {
+   //products.forEach((products, i) => {products.qty_sold = 0});
+//};
+
+//${shopping_cart[prod_key]['quantity'+ (i+1)]}

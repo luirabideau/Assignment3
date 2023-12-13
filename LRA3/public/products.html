@@ -1,0 +1,50 @@
+<!------------------ Created by Lui Rabideau, due on 12/15/2023 ---------------------->
+<!-- Design from W3schools: W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes -->
+<!-------- (https://www.w3schools.com/w3css/tryw3css_templates_architect.htm) -------->
+<!----------------------------- UHM ITM352 Assignment 3 ------------------------------>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Products</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
+<script src="./functions.js"></script>
+<script src="./products.js"></script>
+<link rel="stylesheet" href="./css/products.css">
+<script>faviconInfo()</script>
+<script>
+let params = (new URL(document.location)).searchParams;
+    let prod_key;
+    prod_key = params.get(`location`);
+    let products = all_products[prod_key];
+    productsPageErrors()
+</script>
+</head>
+<body>
+<!-- Navbar -->
+<script>navBar()</script>
+<br><br><br><br>
+<div class="container">
+    <h2 id="headingName"></h2>  
+    <!-- Checkout Form Begin -->  
+    <form action="/login.html" method="GET" name="checkout">
+      <p style="text-align: center;"><button type="submit">checkout</button></p>
+    </form>
+    <!-- Checkout Form End -->
+    <!-- Add to Cart Form Begin -->
+    <form action="./add_to_cart" method="POST" name="purchase_form">
+        <p id="leButton" style="color: red; text-align: center;"></p>
+        <span style="text-align: center;"><button type="submit" name="add_to_cart">add items to cart</button></span>
+        <!-- Generates the products -->
+        <div class="product">
+            <script>
+                productsTable();
+            </script>
+        </div>
+        <input type="hidden" id="location" name="location" value="Chicago">
+    </form>
+    <!-- Add to Cart Form End -->
+</div>
+</body>
+</html>
