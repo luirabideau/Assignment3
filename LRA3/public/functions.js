@@ -40,7 +40,7 @@ function productsTable(){// Function that generates the products on the products
                 <div class="product-avaliability">Product Avaliability: ${products[i].aval}</div>
                 <label id="quantity${i}_label"}">Quantity:</label>
                 <div style="color: blue;" id="active_error${i}"></div>
-                <input type="text" paceholder="0" id="textBox${i}" name="quantity${i}";"> 
+                <input type="number" paceholder="0" id="textBox${i}" name="quantity${i}";"> 
                 <label id="quantity${i}_cart_label"}">In cart: </label> 
                <div style="color: red;" id="error_message${i}"></div>
             </div>
@@ -100,7 +100,7 @@ function checkTextBox(){// Used in products.html to display the active errors in
     };
 }
 
-/*---------------------------------- INVOICE PAGE SPECIFIC FUNCTIONS -----------------------------------*/
+/*------------------------- INVOICE AND SHOPPING CART PAGE SPECIFIC FUNCTIONS --------------------------*/
 
 function generateInvoiceTable(){// The generate item rows function in INVOICE_HTML
     // form was submitted so process the invoice
@@ -130,6 +130,30 @@ function generateInvoiceTable(){// The generate item rows function in INVOICE_HT
         // Subtotal calculation takes place after every loop
         subtotal += extended_price;
     };
+};
+
+function generateCartTable(){// The generate item rows function in SHOPPINGCART_HTML0
+  for (let prod_key in shopping_cart) {
+    let products = all_products[prod_key];
+    for (let i in products) {
+      let a_qty = shopping_cart[prod_key][`quantity${i}`];
+    //creates item rows
+        if(a_qty == 0){//checks for quantities = 0
+          continue;
+        }else{
+        // the div class id="pop up" is IR5
+          document.write(`
+            <tr style="height: 100px;">
+              <td><div class="image-container"><img src="${products[i].image}" style="width: 100%; height: 100%;">              
+              <div class="popup">${products[i].description}</div></div>
+              </td>
+              <td>${products[i].brand}</td>
+              <td>${a_qty}<div style="color:red;">${errors}</div></td>
+              <td>$${products[i].price.toFixed(2)}</td>
+            </tr>`);
+        }
+    }    
+  };
 };
 
 /*---------------------------------------- TEAM PAGE FUNCTION ------------------------------------------*/
@@ -172,4 +196,30 @@ function generatePassword(){// Used in conjunction with the function above. This
   passwordField.value = generatedPassword;
 }
 
+/*----------------------------------------- COOKIE FUNCTIONs -------------------------------------------*/
+/* 
+function setCookie(name, value, daysToLive){// Function to set a cookie
+    var expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + daysToLive);
+    var cookie = name + "=" + encodeURIComponent(value) + "; expires=" + expirationDate.toUTCString() + "; path=/";
+    document.cookie = cookie;
+}
+// Example: Set a cookie named "username" with the value "John Doe" that expires in 7 days
+// setCookie("username", "John Doe", 7);
+
+function getCookie(name){// Function to get the value of a cookie by name
+    let cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.indexOf(name + "=") === 0) {
+            return decodeURIComponent(cookie.substring(name.length + 1));
+        }
+    }
+    return null;
+}
+
+// Example: Get the value of the "username" cookie
+var username = getCookie("username");
+console.log("Username: " + username);
+*/
 /*------------------------------------------------------------------------------------------------------*/

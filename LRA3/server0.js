@@ -123,36 +123,18 @@ app.post('/login', function (request, response){
     // Process login form POST and redirect to logged in page if ok, back to login page if not
     let the_username = request.body.username.toLowerCase();
     let the_password = request.body.password;
-    // check if username is in user_data
-    console.log(`${qs}`);
-    console.log(`${the_username} is working`);
-    if(typeof user_reg_data[the_username] !== 'undefined'){
-       // check if the password matches the password in user_reg_data
-       if(user_reg_data[the_username].password === the_password){
+    if(typeof user_reg_data[the_username] !== 'undefined'){// check if username is in user_data
+       if(user_reg_data[the_username].password === the_password){// check if the password matches the password in user_reg_data
           console.log(`${the_username} is logged in!`);
           // send a username cookie to indicate logged in
           response.cookie("username", the_username, {expire: Date.now() + 5*1000});
-          console.log(`1 ===== ${qs}`);
-          if(qs == 'undefined'){
-             userLoggedin[the_username] = true;
-             response.redirect('./products.html')
-          } else {
-             //remove quantities from products.aval
-             /*for(let i in products){
-                if(qs.has(`quantity${i}`)){
-                      qs4 = qs.get(`quantity${i}`);
-                      products[i].aval -= qs4;
-                };
-             };*/
-             // add new logged in user
-             userLoggedin[the_username] = true;
-             response.redirect(`./invoice.html?${qs}&email=${the_username}&name=${user_reg_data[the_username].name}&numUsersLoggin=${Object.entries(userLoggedin).length}`);
-          }
+          userLoggedin[the_username] = true;
+          response.redirect(`./shoppingCart.html`);
        } else {
-          response.redirect(`./login.html`)
+          response.redirect(`./login.html?passwordError`)
        }
     } else { // else the user does not exist 
-       response.send(`${the_username} does not exist! /login`);
+       response.send(`/login.html?${the_username}Error`);
     }
 });
 
@@ -186,3 +168,30 @@ app.post("/get_cart", function (request, response){
 });    
 
 // ----------------- Sepcific Routing End --------------- //
+// ---------------- Cookie Functions Begin -------------- //
+/* 
+function setCookie(name, value, daysToLive){// Function to set a cookie
+    var expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + daysToLive);
+    var cookie = name + "=" + encodeURIComponent(value) + "; expires=" + expirationDate.toUTCString() + "; path=/";
+    document.cookie = cookie;
+}
+// Example: Set a cookie named "username" with the value "John Doe" that expires in 7 days
+// setCookie("username", "John Doe", 7);
+
+function getCookie(name){// Function to get the value of a cookie by name
+    let cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.indexOf(name + "=") === 0) {
+            return decodeURIComponent(cookie.substring(name.length + 1));
+        }
+    }
+    return null;
+}
+
+// Example: Get the value of the "username" cookie
+var username = getCookie("username");
+console.log("Username: " + username);
+*/
+// ----------------- Cookie Functions End --------------- //

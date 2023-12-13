@@ -1,0 +1,73 @@
+<!------------------ Created by Lui Rabideau, due on 12/15/2023 ---------------------->
+<!-- Design from W3schools: W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes -->
+<!-------- (https://www.w3schools.com/w3css/tryw3css_templates_architect.htm) -------->
+<!----------------------------- UHM ITM352 Assignment 3 ------------------------------>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice</title>
+<!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
+<link rel="stylesheet" href="./css/invoice.css">
+<script src="./functions.js"></script>
+<script>faviconInfo()</script>
+</head>
+<body>
+<!-- Navbar -->
+<script>navBar();</script>
+<br><br><br><br>
+<!-- Interpretting the query string -->
+<script>
+// get the shopping cart data for this user
+loadJSON('get_cart', function (response) {
+          // Parsing JSON string into object
+          shopping_cart = JSON.parse(response);
+          for (prod_key in shopping_cart) {
+              total += shopping_cart[prod_key].reduce((a, b) => a + b);
+          }
+      });
+</script>
+<!-- Content -->
+<div class="invoice">
+  <div class="invoice-header">
+    <h2>Cart</h2>
+  </div>
+  <!-- the actual invoice -->
+  <div class="invoice-body">
+    <h3>Items</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 10%;">Preview</th>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+        </tr>
+      </thead>
+    <tbody>
+      <script>
+        generateCartTable();// Calling the function
+      </script>   
+    </tbody>
+    </table>
+  <!-- table end -->
+  </div>
+  <p><form action="./processInvoice" method="GET">
+    <input type="submit" id="invoice" value="Checkout">
+  </form></p>
+</div>  
+<script>
+    function removeItem(productId) {
+        // Implement logic to remove item from the cart
+        alert('Item removed from the cart');
+    }
+
+    function checkout() {
+        // Implement logic to process the order
+        alert('Checkout clicked. Order processed!');
+    }
+</script>
+
+</body>
+</html>
