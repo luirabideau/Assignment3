@@ -3,7 +3,7 @@
 /*--------------------------------------- UHM ITM352 Assignment 3 --------------------------------------*/
 
 /*---------------------------------- GENERAL FUNCTIONS USED EVERWHERE ----------------------------------*/
-function faviconInfo(){ //contains favicon and css information
+function faviconInfo(){//contains favicon and css information
     document.write(`
       <link rel="stylesheet" href="./css/home.css">
       <link rel="icon" href="./images/letterR.png" type="image/png">
@@ -48,7 +48,7 @@ function productsTable(){// Function that generates the products on the products
     };
 } 
 
-function productsPageErrors(){
+function productsPageErrors(){// Interprets the errors from the query string and displays them
     // the following only occurs when the page is loaded (as opposed to the function after this which executes 10 times a sec)
     window.onload=function(){
     // intepretting the information given to us by the server
@@ -81,7 +81,7 @@ function productsPageErrors(){
   setInterval(checkTextBox, 100);
 }
 
-function checkTextBox(){// used in products.html to display the active errors in the textboxes
+function checkTextBox(){// Used in products.html to display the active errors in the textboxes
     for(let i in products){// the loop is necessary so that all textboxes dont show the same thing
       // getting the value from the textbox
       let textBoxValue = document.getElementById(`textBox${i}`).value;
@@ -102,6 +102,36 @@ function checkTextBox(){// used in products.html to display the active errors in
 
 /*---------------------------------- INVOICE PAGE SPECIFIC FUNCTIONS -----------------------------------*/
 
+function generateInvoiceTable(){// The generate item rows function in INVOICE_HTML
+    // form was submitted so process the invoice
+  for (let prod_key in shopping_cart) {
+    let products = all_products[prod_key];
+    for (let i in products) {
+      a_qty = shopping_cart[prod_key][`quantity${i}`];
+    //creates item rows
+        let extended_price = a_qty * products[i].price;
+        //checks for quantities = 0
+        if(a_qty == 0){
+          continue;
+        }else{
+        // the div class id="pop up" is IR5
+          document.write(`
+            <tr style="height: 100px;">
+              <td><div class="image-container"><img src="${products[i].image}" style="width: 100%; height: 100%;">              
+              <div class="popup">${products[i].description}</div></div>
+              </td>
+              <td>${products[i].brand}</td>
+              <td>${a_qty}<div style="color:red;">${errors}</div></td>
+              <td>$${products[i].price.toFixed(2)}</td>
+              <td>$${extended_price.toFixed(2)}</td>
+            </tr>`);
+        }
+      }    
+        // Subtotal calculation takes place after every loop
+        subtotal += extended_price;
+    };
+};
+
 /*---------------------------------------- TEAM PAGE FUNCTION ------------------------------------------*/
 function teamTable(){// Function that generates the professionals information on the our team/about page
     for (let i in professionals) {
@@ -115,7 +145,6 @@ function teamTable(){// Function that generates the professionals information on
         `)
     };
 }
-/*------------------------------------------------------------------------------------------------------*/
 
 /*-------------------------------------- OTHER GENERAL FUNCTIONS ---------------------------------------*/
 function getCurrentDate() {// Function to get the current date in the format YYYY-MM-DD
@@ -126,3 +155,21 @@ function getCurrentDate() {// Function to get the current date in the format YYY
     const day = String(today.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
+
+function generateRandomPassword(length){// Generate password function from CHATGPT, used prompt "recommend password function in textbox javascript and html"
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?/{}[]";
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset.charAt(randomIndex);
+    }
+    return password;
+}
+
+function generatePassword(){// Used in conjunction with the function above. This function is called at the click of a button and it takes the value of the generatePassword function and returns it to a specificied elementID
+  const passwordField = document.getElementById("password");
+  const generatedPassword = generateRandomPassword(10); // Change the length as needed
+  passwordField.value = generatedPassword;
+}
+
+/*------------------------------------------------------------------------------------------------------*/
