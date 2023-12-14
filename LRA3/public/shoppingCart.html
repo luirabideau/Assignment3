@@ -11,6 +11,7 @@
 <!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
 <link rel="stylesheet" href="./css/invoice.css">
 <script src="./functions.js"></script>
+<script src="./products.js"></script>
 <script>faviconInfo();</script>
 <script>
   let cookieName = getCookie("name");//Function that gets name cookie
@@ -27,9 +28,6 @@ let subtotal = 0;//Subtotal
 loadJSON('get_cart', function (response) {
   // Parsing JSON string into object
   shopping_cart = JSON.parse(response);
-  for (prod_key in shopping_cart) {
-    total += shopping_cart[prod_key].reduce((a, b) => a + b);
-  }
 });
 </script>
 <!-- Content -->

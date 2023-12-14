@@ -11,8 +11,6 @@ app.use(cookieParser());
 const session = require('express-session');
 app.use(session({secret: "MySecretKey", resave: true, saveUninitialized: true}));
 
-// USERDATA FILE STUFF FROM LAB13 FILE IO 
-// global variable to store IR5 stuff (users logged in)
 let userLoggedin = {};
 
 const fs = require('fs');

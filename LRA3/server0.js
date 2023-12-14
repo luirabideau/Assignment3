@@ -89,6 +89,16 @@ app.post('/get_cart', function(request, response, next){
     response.send(JSON.stringify(request.session.cart));
 });
 
+// sending back the cart 
+app.post('/update_cart', function(request, response, next){
+   console.log(request.query);
+   // update the cart for this item
+   request.session.cart[request.query.location][`quantity${request.query.productIndex}`]=request.query.value;
+   // the response will be json
+   response.type('json');
+   // turning the cart into a JSON string and sending it
+   response.send(JSON.stringify(request.session.cart));
+});
 // ----------------- General Routing End ---------------- //
 
 // --- Route all other requests to files in public -- //
@@ -145,10 +155,10 @@ app.post('/add_to_cart', function (request, response, next){// process purchase 
       } 
    };
    // this checks if all the product quantities were either 0 or empty
-   if(noInput == products.length){
+  // if(noInput == products.length){
       //sends the error back to the page
-         response.redirect(`./products.html?${prod_key}&error=NoInput`);
-   }else{
+  //       response.redirect(`./products.html?${prod_key}&error=NoInput`);
+   //}else{
       // if valid, send info to invoice
       qs = querystring.stringify(request.body);
       if (Object.entries(errors).length === 0) {
@@ -170,7 +180,7 @@ app.post('/add_to_cart', function (request, response, next){// process purchase 
          response.redirect(`./products.html?location=${prod_key}&${querystring.stringify(errors)}`);
          
       }
-   }
+ //  }
 });
 
 app.post('/login', function (request, response){// Validates a users login, and redirects page to the page if invalid and to cart if valid

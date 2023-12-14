@@ -40,6 +40,7 @@ let params = (new URL(document.location)).searchParams;
         <div class="product">
             <script>
                 productsTable();
+                document.write(`<input type="hidden" name="location" value="${prod_key}">`);
             </script>
         </div>
     </form>

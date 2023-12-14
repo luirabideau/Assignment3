@@ -83,6 +83,20 @@ function logout() {// deletes the logged in cookie and reloads the page
   location.reload();
 }
 
+// This function asks the server for a "service" and converts the response to text. 
+function loadJSON(service, callback) {   
+  let xobj = new XMLHttpRequest();
+  xobj.overrideMimeType("application/json");
+  xobj.open('POST', service, false);
+  xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == "200") {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText);
+        }
+  };
+  xobj.send(null);  
+}
+
 /*---------------------------------- PRODUCTS PAGE SPECIFIC FUNCTIONS ----------------------------------*/
 function productsTable(){// Function that generates the products on the products.html page
     for (let i in products){
@@ -205,13 +219,22 @@ function generateCartTable(){// The generate item rows function in SHOPPINGCART_
               </td>
               <td><input id="cartFavorite" type="checkbox" value="This should have a placeholder value"></td>
               <td>${products[i].brand}</td>
-              <td><label>Edit:</label><input type="number" id="cartQuantity" value="This should have a placeholder value"></td>
+              <td><label>Edit:</label><input type="number" id="quantityTextbox${prod_key}_${i}" onchange="updateQuantity('${prod_key}',${i});" value="${a_qty}"></td>
               <td>$${products[i].price.toFixed(2)}</td>
             </tr>`);
         }
     }    
   };
 };
+
+function updateQuantity(location, productIndex){
+  console.log(location, productIndex, document.getElementById(`quantityTextbox${location}_${productIndex}`).value);
+  // get the shopping cart data for this user
+loadJSON(`update_cart?location=${location}&productIndex=${productIndex}&value=${document.getElementById(`quantityTextbox${location}_${productIndex}`).value}`, function (response) {
+  // Parsing JSON string into object
+  shopping_cart = JSON.parse(response);
+});
+}
 
 /*---------------------------------------- TEAM PAGE FUNCTION ------------------------------------------*/
 function teamTable(){// Function that generates the professionals information on the our team/about page
