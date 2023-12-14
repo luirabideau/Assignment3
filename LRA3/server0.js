@@ -93,7 +93,7 @@ app.post('/get_cart', function(request, response, next){
 app.post('/update_cart', function(request, response, next){
    console.log(request.query);
    // update the cart for this item
-   request.session.cart[request.query.location][`quantity${request.query.productIndex}`]=request.query.value;
+   request.session.cart[request.query.location][`quantity${request.query.productIndex}`] = Number(request.query.value);
    // the response will be json
    response.type('json');
    // turning the cart into a JSON string and sending it
@@ -224,9 +224,38 @@ app.post('/processToInvoice', function (request, response){// Validates that at 
       response.redirect(`./invoice.html`);
 });
 
-app.post('/finalizePurchase', function (request, response){// Sends the email and then sends user to the thank you page
-   response.cookie("invoice", 1, {expire: Date.now() + 5*1000});// make a came from invoice cookie
+//app.post('/finalizePurchase', function (request, response){// Sends the email and then sends user to the thank you page
+//   response.redirect(`./thankYou.html`);
+//});
+
+app.get("/finalizePurchase", function (request, response) {
+      const nodemailer = require('nodemailer');
+   // Set up mail server. Only will work on UH Network due to security restrictions
+     let transporter = nodemailer.createTransport({
+       host: "mail.hawaii.edu",
+       port: 25,
+       secure: false, // use TLS
+       tls: {
+         // do not fail on invalid certs
+         rejectUnauthorized: false
+       }
+     });
+   // Define the email options
+     let user_email = 'erabidea@hawaii.edu';
+     let mailOptions = {
+       from: 'erabidea@hawaii.edu',
+       to: user_email,
+       subject: 'Ryer Architects Purchase Confirmation',
+       text: 'please work'
+      };
+      // Send the email
+      transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error:', error);
+      } else {
+        console.log('Email sent:', info.response);
+      }
+      });
    response.redirect(`./thankYou.html`);
 });
-
 // ----------------- Sepcific Routing End --------------- //

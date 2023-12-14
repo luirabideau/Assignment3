@@ -18,6 +18,7 @@
   //  window.location.href = "/login.html"; // redirect to an error page
   //}
     let cookieName = getCookie("name");//Function that gets name cookie
+    let emailName = getCookie("username");//Function that gets name cookie
 </script>
 </head>
 <body>
@@ -25,15 +26,21 @@
 <script>
     navBar();
 </script>
-<br><br><br><br>
+<header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+    <img class="w3-image" src="./images/theHudsonYards.jpg" width="100%" height="50%">
+    <div class="w3-display-middle w3-margin-top w3-center">
+      <h1 class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><script>document.write(`
+        <b>Thank You ${cookieName}</b>`);</script></span></h1>
+    </div>
+</header>
     <!-- Page content -->
     <div class="w3-content w3-padding content" style="max-width:1564px">
         <div class="w3-container w3-padding-32">
             <script>
                 document.write(`
-                <p style="text-align: center">Thank you ${cookieName}!</p>  
-                <p>Your order is being processed! It will ship within 1-2 business days to: ADDRESS LINES</p>`
-                );
+                <p style="text-align: center">Your order is being processed!</p>
+                <p style="text-align: center">It will ship within 1-2 business days to: ADDRESS LINES.</p>
+                <p style="text-align: center">Check your ${emailName} inbox for the confirmation email.</p>`);  
             </script>
         </div>
     </div>

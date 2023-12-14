@@ -26,3 +26,23 @@
 //   if(myCookieValue = 'undefined'){
       response.redirect(`./login.html`);
 //   }else{//   };
+
+
+
+              <!-- Subtotal and Shipping costs portion of the table -->
+              <tr>
+                <td colspan="5">Subtotal</td>
+                <td><script>document.write('$'+(subtotal).toFixed(2))</script></td>
+              </tr>
+              <tr>
+                <td colspan="5">Shipping Cost</td>
+                <td><script>document.write('$'+(shipping).toFixed(2))</script></td>
+              </tr>
+              <tr>
+                <td colspan="5">Tax (4.74%)</td>
+                <td><script>document.write('$'+(tax).toFixed(2))</script></td>
+              </tr>
+              <tr>
+                <td colspan="5">Total</td>
+                <td><script>document.write('$'+(gTotal).toFixed(2))</script></td>
+              </tr>  

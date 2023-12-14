@@ -23,14 +23,12 @@
   }
   let subtotal = 0;//Subtotal
   let cookieName = getCookie("name");//Function that gets name cookie
+  let cookieEmail = getCookie("username");//Function that gets email cookie
   let date = getCurrentDate();// Function to get the current date in the format YYYY-MM-DD
      // get the shopping cart data for this user
   loadJSON('get_cart', function (response) {
             // Parsing JSON string into object
             shopping_cart = JSON.parse(response);
-            for (prod_key in shopping_cart) {
-                total += shopping_cart[prod_key].reduce((a, b) => a + b);
-            }
         });
 </script>
 </head>
@@ -43,7 +41,7 @@
     <div class="invoice-header">
       <h2>Invoice</h2>
       <script>
-          document.write(`<p>Hello ${cookieName}</p><div id="currentDateContainer">${date}</div>`);
+          document.write(`<p>Hello <b>${cookieName}</b></p><div id="currentDateContainer">Date Purchased: ${date}</div><p>Email: ${cookieEmail}</p>`);
       </script>
     </div>
     <!-- the actual invoice -->
@@ -104,8 +102,8 @@
       <p>Subtotals over $100 will be charged shipping equal to 10% of the subtotal amount</p>
       <p>Girl math states that any subtotal under or equal to $100 is hereby 5% off</p>
 
-      <h3>Shipping Information</h3>
-      <form action="./finalizePurchase" method="post">
+      <p style="font-weight: bold;">SHIPPING INFORMATION:</p>
+      <form action="./finalizePurchase" method="get">
         <p><label for="address">Address Line 2:</label>
           <input type="text" id="address1" name="address1" required></p>
         <p><label for="address">Address Line 2:</label>

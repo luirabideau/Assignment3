@@ -13,6 +13,7 @@ function faviconInfo(){//contains favicon and css information
 
 function navBar(){// Makes a navbar
   let isloggedin = getCookie("loggedIn");
+  let nameCookie = getCookie("name");
   if(isloggedin == 1){
     document.write(`
     <div class="w3-top">
@@ -25,6 +26,7 @@ function navBar(){// Makes a navbar
        <a href="./products.html?location=Chicago" class="w3-bar-item w3-button">Chicago</a>
        <a href="./team.html" class="w3-bar-item w3-button">Our Team</a>
        <a href="#" class="w3-bar-item w3-button" onclick="logout()">Log Out</a>
+       <a href="./shoppingCart.html" class="w3-bar-item w3-button">${nameCookie}'s Cart</a>
      </div>
     </div>
    </div>
@@ -97,10 +99,24 @@ function loadJSON(service, callback) {
   xobj.send(null);  
 }
 
+// Function to reload the page every second for 5 seconds
+function reloadPageFor2Seconds() {
+  let seconds = 0;
+  const reloadInterval = setInterval(function () {
+      if (seconds < 2) {
+          location.reload();
+          seconds++;
+      } else {
+          clearInterval(reloadInterval);
+      }
+  }, 1000); // 1000 milliseconds = 1 second
+}
+
 /*---------------------------------- PRODUCTS PAGE SPECIFIC FUNCTIONS ----------------------------------*/
 function productsTable(){// Function that generates the products on the products.html page
     for (let i in products){
-        document.write(` 
+      let a_qty = shopping_cart[prod_key][`quantity${i}`];
+        document.write(`   
             <div class="product-item">
                 <img class="product-image" src="${products[i].image}">
                 <div class="product-title">${products[i].brand}</div>
@@ -110,8 +126,8 @@ function productsTable(){// Function that generates the products on the products
                 <div class="product-avaliability">Product Avaliability: ${products[i].aval}</div>
                 <label id="quantity${i}_label"}">Quantity:</label>
                 <div style="color: blue;" id="active_error${i}"></div>
-                <input type="number" paceholder="0" id="textBox${i}" name="quantity${i}";" min="1"> 
-                <label id="quantity${i}_cart_label"}">In cart: </label> 
+                <input type="number" id="textbox${prod_key}_${i}" name="quantity${i}";" onchange="updateQuantity('${prod_key}',${i});" value="${a_qty}">
+                <span id="quantity${i}_cart_label"}">In cart: ${a_qty}</span> 
                <div style="color: red;" id="error_message${i}"></div>
             </div>
         `)
@@ -154,7 +170,7 @@ function productsPageErrors(){// Interprets the errors from the query string and
 function checkTextBox(){// Used in products.html to display the active errors in the textboxes
     for(let i in products){// the loop is necessary so that all textboxes dont show the same thing
       // getting the value from the textbox
-      let textBoxValue = document.getElementById(`textBox${i}`).value;
+      let textBoxValue = document.getElementById(`textbox${prod_key}_${i}`).value;
       // if the textboxvalue is 0 or nothing, return empty '', else if return whatever the error is, else return a "you want--"
       if(textBoxValue === '' || textBoxValue == 0){
         document.getElementById(`active_error${i}`).innerHTML = "";
@@ -177,28 +193,28 @@ function generateInvoiceTable(){// The generate item rows function in INVOICE_HT
   for (let prod_key in shopping_cart) {
     let products = all_products[prod_key];
     for (let i in products) {
-      a_qty = shopping_cart[prod_key][`quantity${i}`];
+      let a_qty = shopping_cart[prod_key][`quantity${i}`];
     //creates item rows
-        let extended_price = a_qty * products[i].price;
+        extended_price = a_qty * products[i].price;
+        subtotal += extended_price;
         //checks for quantities = 0
         if(a_qty == 0){
           continue;
         }else{
-        // the div class id="pop up" is IR5
           document.write(`
             <tr style="height: 100px;">
               <td><div class="image-container"><img src="${products[i].image}" style="width: 100%; height: 100%;">              
               <div class="popup">${products[i].description}</div></div>
               </td>
               <td>${products[i].brand}</td>
-              <td>${a_qty}<div style="color:red;">${errors}</div></td>
+              <td>${a_qty}</td>
               <td>$${products[i].price.toFixed(2)}</td>
               <td>$${extended_price.toFixed(2)}</td>
             </tr>`);
         }
       }    
         // Subtotal calculation takes place after every loop
-        subtotal += extended_price;
+        
     };
 };
 
@@ -208,6 +224,8 @@ function generateCartTable(){// The generate item rows function in SHOPPINGCART_
     for (let i in products) {
       let a_qty = shopping_cart[prod_key][`quantity${i}`];
     //creates item rows
+      extended_price = a_qty * products[i].price;
+      subtotal += extended_price;
         if(a_qty == 0){//checks for quantities = 0
           continue;
         }else{
@@ -221,18 +239,20 @@ function generateCartTable(){// The generate item rows function in SHOPPINGCART_
               <td>${products[i].brand}</td>
               <td><label>Edit:</label><input type="number" id="quantityTextbox${prod_key}_${i}" onchange="updateQuantity('${prod_key}',${i});" value="${a_qty}"></td>
               <td>$${products[i].price.toFixed(2)}</td>
+              <td>$${extended_price.toFixed(2)}</td>
             </tr>`);
         }
-    }    
+    }  
   };
 };
 
 function updateQuantity(location, productIndex){
   console.log(location, productIndex, document.getElementById(`quantityTextbox${location}_${productIndex}`).value);
   // get the shopping cart data for this user
-loadJSON(`update_cart?location=${location}&productIndex=${productIndex}&value=${document.getElementById(`quantityTextbox${location}_${productIndex}`).value}`, function (response) {
+  loadJSON(`update_cart?location=${location}&productIndex=${productIndex}&value=${document.getElementById(`quantityTextbox${location}_${productIndex}`).value}`, function (response) {
   // Parsing JSON string into object
   shopping_cart = JSON.parse(response);
+  reloadPageFor2Seconds();
 });
 }
 

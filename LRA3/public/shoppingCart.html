@@ -24,8 +24,7 @@
 <!-- The actual page -->
 <script>
 let subtotal = 0;//Subtotal  
-// get the shopping cart data for this user
-loadJSON('get_cart', function (response) {
+loadJSON('get_cart', function (response) {// get the shopping cart data for this user
   // Parsing JSON string into object
   shopping_cart = JSON.parse(response);
 });
@@ -59,37 +58,14 @@ loadJSON('get_cart', function (response) {
     <tbody>
       <script>
         generateCartTable();// Calling the function
-        //Tax
-        let tax = +(subtotal * 0.0474).toFixed(2);
-            //Shipping computations
-            let shipping;
-            // subtotals under or equal to 100
-            if(subtotal <= 100){
-              shipping = +(subtotal * 0.05).toFixed(2);
-            } else {
-              // 5% shipping rate on any totals above 100
-              shipping = +(subtotal * 0.10).toFixed(2);
-            }
-            //Grand Total 
-            let gTotal = subtotal + tax + shipping;
+            document.write(`
+            <tr>
+              <td colspan="5" style="text-align: right">Subtotal:</td><td>$${(subtotal).toFixed(2)}</td>
+            </tr>
+            `);
       </script> 
-              <!-- Subtotal and Shipping costs portion of the table -->
-              <tr>
-                <td colspan="5">Subtotal</td>
-                <td><script>document.write('$'+(subtotal).toFixed(2))</script></td>
-              </tr>
-              <tr>
-                <td colspan="5">Shipping Cost</td>
-                <td><script>document.write('$'+(shipping).toFixed(2))</script></td>
-              </tr>
-              <tr>
-                <td colspan="5">Tax (4.74%)</td>
-                <td><script>document.write('$'+(tax).toFixed(2))</script></td>
-              </tr>
-              <tr>
-                <td colspan="5">Total</td>
-                <td><script>document.write('$'+(gTotal).toFixed(2))</script></td>
-              </tr>  
+      
+
     </tbody>
     </table>
   <!-- table end -->
