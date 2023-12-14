@@ -75,9 +75,10 @@ function generatePassword(){// Used in conjunction with the function above. This
 
 function logout() {// deletes the logged in cookie and reloads the page
   // Deletes all cookies
-  document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie = "cfsc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   // Reload the current page
   location.reload();
 }
@@ -91,10 +92,11 @@ function productsTable(){// Function that generates the products on the products
                 <div class="product-title">${products[i].brand}</div>
                 <div class="product-description">${products[i].description}</div>
                 <span class="product-price">$${products[i].price}</span>
+                <lable>Favorite:</lable><input type="checkbox" id="favoriteCheckbox" name="favorite"> 
                 <div class="product-avaliability">Product Avaliability: ${products[i].aval}</div>
                 <label id="quantity${i}_label"}">Quantity:</label>
                 <div style="color: blue;" id="active_error${i}"></div>
-                <input type="number" paceholder="0" id="textBox${i}" name="quantity${i}";"> 
+                <input type="number" paceholder="0" id="textBox${i}" name="quantity${i}";" min="1"> 
                 <label id="quantity${i}_cart_label"}">In cart: </label> 
                <div style="color: red;" id="error_message${i}"></div>
             </div>
@@ -201,8 +203,9 @@ function generateCartTable(){// The generate item rows function in SHOPPINGCART_
               <td><div class="image-container"><img src="${products[i].image}" style="width: 100%; height: 100%;">              
               <div class="popup">${products[i].description}</div></div>
               </td>
+              <td><input id="cartFavorite" type="checkbox" value="This should have a placeholder value"></td>
               <td>${products[i].brand}</td>
-              <td>${a_qty}<div style="color:red;">${errors}</div></td>
+              <td><label>Edit:</label><input type="number" id="cartQuantity" value="This should have a placeholder value"></td>
               <td>$${products[i].price.toFixed(2)}</td>
             </tr>`);
         }
@@ -223,8 +226,6 @@ function teamTable(){// Function that generates the professionals information on
         `)
     };
 }
-
-
 
 /*----------------------------------------- COOKIE FUNCTIONs -------------------------------------------*/
  

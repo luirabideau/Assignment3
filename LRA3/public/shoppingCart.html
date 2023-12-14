@@ -20,8 +20,9 @@
 <!-- Navbar -->
 <script>navBar();</script>
 <br><br><br><br>
-<!-- Interpretting the query string -->
+<!-- The actual page -->
 <script>
+let subtotal = 0;//Subtotal  
 // get the shopping cart data for this user
 loadJSON('get_cart', function (response) {
   // Parsing JSON string into object
@@ -35,8 +36,12 @@ loadJSON('get_cart', function (response) {
 <div class="invoice">
   <div class="invoice-header">
     <h2>Cart</h2>
-    <script>
-      document.write(`<p>User: ${cookieName}</p>`);
+    <script> 
+     if(cookieName != null){
+        document.write(`<p>User: ${cookieName}</p>`);
+      } else {
+        document.write(`<p><a href="./login.html">Login</a></p>`);
+      }; 
     </script>
   </div>
   <!-- the actual invoice -->
@@ -46,15 +51,47 @@ loadJSON('get_cart', function (response) {
       <thead>
         <tr>
           <th style="width: 10%;">Preview</th>
+          <th>Favorite</th>
           <th>Product</th>
           <th>Quantity</th>
           <th>Unit Price</th>
+          <th>Total</th>
         </tr>
       </thead>
     <tbody>
       <script>
         generateCartTable();// Calling the function
-      </script>   
+        //Tax
+        let tax = +(subtotal * 0.0474).toFixed(2);
+            //Shipping computations
+            let shipping;
+            // subtotals under or equal to 100
+            if(subtotal <= 100){
+              shipping = +(subtotal * 0.05).toFixed(2);
+            } else {
+              // 5% shipping rate on any totals above 100
+              shipping = +(subtotal * 0.10).toFixed(2);
+            }
+            //Grand Total 
+            let gTotal = subtotal + tax + shipping;
+      </script> 
+              <!-- Subtotal and Shipping costs portion of the table -->
+              <tr>
+                <td colspan="5">Subtotal</td>
+                <td><script>document.write('$'+(subtotal).toFixed(2))</script></td>
+              </tr>
+              <tr>
+                <td colspan="5">Shipping Cost</td>
+                <td><script>document.write('$'+(shipping).toFixed(2))</script></td>
+              </tr>
+              <tr>
+                <td colspan="5">Tax (4.74%)</td>
+                <td><script>document.write('$'+(tax).toFixed(2))</script></td>
+              </tr>
+              <tr>
+                <td colspan="5">Total</td>
+                <td><script>document.write('$'+(gTotal).toFixed(2))</script></td>
+              </tr>  
     </tbody>
     </table>
   <!-- table end -->
@@ -63,16 +100,5 @@ loadJSON('get_cart', function (response) {
     <input type="submit" id="invoice" value="Checkout">
   </form></p>
 </div>  
-<script>
-    function removeItem(productId) {
-        // Implement logic to remove item from the cart
-        alert('Item removed from the cart');
-    }
-
-    function checkout() {
-        // Implement logic to process the order
-        alert('Checkout clicked. Order processed!');
-    }
-</script>
 </body>
 </html>
