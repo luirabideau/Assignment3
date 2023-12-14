@@ -207,11 +207,7 @@ app.post('/register', function (request, response){// Makes a new user while val
     } else {
        response.redirect(`./register.html`)
     }
-});
-
-app.post("/get_cart", function (request, response){
-    response.json(request.session.cart);
-});    
+});  
 
 app.post('/processToInvoice', function (request, response){// Validates that at least 1 item is being bought, and then sends user to the invoice page if they are logged in
 //      response.cookie("cfsc", 1, {expire: Date.now() + 30 * 60 * 1000});// make a came-from-shopping-cart cookie
@@ -223,21 +219,4 @@ app.post('/finalizePurchase', function (request, response){// Sends the email an
    response.redirect(`./thankYou.html`);
 });
 
-app.get('/logout', function(request, response){
-   document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-   document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-   document.cookie = "loggenIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-   document.cookie = "cfsc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-   response.redirect(back);
-});
 // ----------------- Sepcific Routing End --------------- //
-// ---------------- Cookie Functions Begin -------------- //
-
-// Example: Set a cookie named "username" with the value "John Doe" that expires in 7 days
-// setCookie("username", "John Doe", 7);
-
-// Example: Get the value of the "username" cookie
-//var username = getCookie("username");
-//console.log("Username: " + username);
-
-// ----------------- Cookie Functions End --------------- //
