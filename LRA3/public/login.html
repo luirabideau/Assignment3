@@ -11,7 +11,9 @@
 <!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
 <script src="./functions.js"></script>
 <link rel="stylesheet" href="./css/login.css">
-<script>faviconInfo()</script>
+<script>
+    faviconInfo();
+</script>
 </head>
 <body>
 <!-- Navbar -->
@@ -20,6 +22,7 @@
 <!-- Header -->
 <div class="login-container">
     <h2>Login</h2>
+    <p style="text-align: center;"><div style="color: red;" id="error_message"></div></p>
     <form action="./login" method="post">
         <!-- Email -->
         <label for="username">Email:</label>
@@ -32,6 +35,7 @@
         <script>
             let inCart = getCookie("totalIC");
             document.write(`<input type="hidden" name="total" value="${inCart}">`);
+            loginError();
         </script>
     </form>
     <p style="text-align: center;">

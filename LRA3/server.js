@@ -218,10 +218,10 @@ app.post('/login', function (request, response){// Validates a users login, and 
             response.redirect(`./shoppingCart.html`);
           }
        } else {
-          response.redirect(`./login.html?passwordError`)
+          response.redirect(`./login.html?error=pass`)
        }
     } else { // else the user does not exist 
-       response.send(`/login.html?${the_username}Error`);
+       response.redirect(`./login.html?error=user`);
     }
 });
 

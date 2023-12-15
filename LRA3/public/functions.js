@@ -173,6 +173,19 @@ function productsPageErrors(){// Interprets the errors from the query string and
   setInterval(checkTextBox, 100);
 }
 
+function loginError(){ //shows the login errors
+  let params = (new URL(document.location)).searchParams; //gets the query string for errors
+  console.log(`yes`);
+  if (params.get(`error`)=== `user`) {
+    console.log(`yes1`);
+    document.getElementById(`error_message`).innerHTML = 'User does not exist!';
+    };
+  if (params.get(`error`)=== `pass`) { 
+    console.log(`yes2`);
+    document.getElementById(`error_message`).innerHTML = "Invalid Password";
+    };
+}
+
 function checkTextBox(){// Used in products.html to display the active errors in the textboxes
     for(let i in products){// the loop is necessary so that all textboxes dont show the same thing
       // getting the value from the textbox
