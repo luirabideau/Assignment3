@@ -51,6 +51,7 @@ function navBar(){// Makes a navbar
   }
 }
 
+// from ChatGPT, modified by Lui Rabideau under prompt "function that gets current date"
 function getCurrentDate() {// Function to get the current date in the format YYYY-MM-DD
     // Function from ChatGPT using the "make me a function that gets todays date using javascript" prompt
     const today = new Date();
@@ -60,7 +61,8 @@ function getCurrentDate() {// Function to get the current date in the format YYY
     return `${year}-${month}-${day}`;
 }
 
-function generateRandomPassword(length){// Generate password function from CHATGPT, used prompt "recommend password function in textbox javascript and html"
+// from ChatGPT, modified by Lui Rabideau under prompt "recommend password function in textbox javascript and html"
+function generateRandomPassword(length){// Generate password function 
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?/{}[]";
     let password = "";
     for (let i = 0; i < length; i++) {
@@ -101,7 +103,7 @@ function loadJSON(service, callback) {
   xobj.send(null);  
 }
 
-// Function to reload the page every second for 5 seconds
+// from ChatGPT, modified by Lui Rabideau under prompt "function to reload the page every second for 5 seconds"
 function reloadPageFor1Seconds() {
   let seconds = 0;
   const reloadInterval = setInterval(function () {
@@ -305,16 +307,15 @@ function teamTable(){// Function that generates the professionals information on
 
 /*----------------------------------------- COOKIE FUNCTIONs -------------------------------------------*/
 
-// taken from ChatGPT with the prompt "make me a function that makes cookies that last for 30 minutes"
+// from ChatGPT, modified by Lui Rabideau under prompt "make me a function that makes cookies that last for 30 minutes"
 function setCookie(name, value, minutesToExpire) {// Function to set a cookie with a specified expiration time
   const expirationDate = new Date();
   expirationDate.setTime(expirationDate.getTime() + (minutesToExpire * 60 * 1000));
   const cookieString = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
   document.cookie = cookieString;
 }
-// Example: Set a cookie named "username" with the value "John Doe" that expires in 7 days
-// setCookie("username", "John Doe", 7);
 
+// from ChatGPT, modified by Lui Rabideau under prompt "function to get the value of cookie"
 function getCookie(name){// Function to get the value of a cookie by name
     let cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
@@ -326,6 +327,7 @@ function getCookie(name){// Function to get the value of a cookie by name
     return null;
 }
 
+// from ChatGPT, modified by Lui Rabideau under prompt "function to check if cookie exists"
 function checkCookie(cookieName) {// Function to check if a cookie exists
   var cookies = document.cookie.split(';');
   for (var i = 0; i < cookies.length; i++) {
