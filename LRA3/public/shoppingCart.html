@@ -23,6 +23,7 @@
 <br><br><br><br>
 <!-- The actual page -->
 <script>
+let params = (new URL(document.location)).searchParams;
 let subtotal = 0;//Subtotal  
 loadJSON('get_cart', function (response) {// get the shopping cart data for this user
   shopping_cart = JSON.parse(response);  // Parsing JSON string into object
@@ -60,6 +61,7 @@ setCookie("totalIC", totalInCart, 30)
   <!-- the actual invoice -->
   <div class="invoice-body">
     <h3>Items</h3>
+    <p style="text-align: center;"><div style="color: red;" id="error_message"></div></p>
     <table>
       <thead>
         <tr>
@@ -80,16 +82,22 @@ setCookie("totalIC", totalInCart, 30)
             </tr>
             `);
       </script> 
-      
-
     </tbody>
     </table>
   <!-- table end -->
   </div>
   <p><form action="./processToInvoice" method="post">
-    
+    <script>
+      let numInCart = getCookie("totalIC");
+      document.write(`<input type="hidden" name="numInCart" value="${numInCart}">`);
+    </script>
     <input type="submit" id="invoice" value="Checkout">
   </form></p>
+  <script>
+    if (params.has(`NoInput`)) {
+      document.getElementById(`error_message`).innerHTML = 'You must buy at least 1 item';
+    };
+  </script>
 </div>  
 </body>
 </html>

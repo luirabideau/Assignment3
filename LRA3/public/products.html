@@ -34,6 +34,7 @@ const totalInCart = countTotals(shopping_cart);
 console.log(totalInCart);
 setCookie("totalIC", totalInCart, 30)
 });
+// the following displays the proper city page
 let params = (new URL(document.location)).searchParams;
     let prod_key;
     prod_key = params.get(`location`);

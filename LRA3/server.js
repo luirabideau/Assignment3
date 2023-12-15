@@ -48,9 +48,6 @@ app.all('*', function (request, response, next){// this function also makes the 
    next();
 });
 
-// process a route for invoice
-
-
 // process a route for the products.json stuff
 const all_products = require(__dirname + "/products.json");
 app.get('/products.js', function(request, response, next){// making a products array within the server
@@ -171,11 +168,6 @@ app.post('/add_to_cart', function (request, response, next){// process purchase 
          noInput++;
       } 
    };
-   // this checks if all the product quantities were either 0 or empty
-  // if(noInput == products.length){
-      //sends the error back to the page
-  //       response.redirect(`./products.html?${prod_key}&error=NoInput`);
-   //}else{
       // if valid, send info to invoice
       qs = querystring.stringify(request.body);
       if (Object.entries(errors).length === 0) {
@@ -197,7 +189,6 @@ app.post('/add_to_cart', function (request, response, next){// process purchase 
       else{ 
          response.redirect(`./products.html?location=${prod_key}&${querystring.stringify(errors)}`);  
       }
- //  }
 });
 
 app.post('/cartPage', function (request, response){// Sends to cart if logged in, sends to login if not
@@ -239,7 +230,6 @@ app.post('/register', function (request, response){// Makes a new user while val
     user_reg_data[username] = {};
     user_reg_data[username].password = request.body.password;
     user_reg_data[username].username = request.body.username;  
-    let fullName; 
     user_reg_data[username].name = request.body.firstname + ' ' + request.body.lastname;
     // add it to the user_data.json
     fs.writeFileSync(user_data_filename, JSON.stringify(user_reg_data));
@@ -261,18 +251,39 @@ app.post('/register', function (request, response){// Makes a new user while val
 });  
 
 app.post('/processToInvoice', function (request, response){// Validates that at least 1 item is being bought, and then sends user to the invoice page if they are logged in
-
-      response.redirect(`./invoice.html`);
+      let cartTotal = request.body.numInCart;
+      if(cartTotal > 0){
+         response.redirect(`./invoice.html`);
+      }else{
+         response.redirect(`./shoppingCart.html?NoInput`);}
 });
 
-app.get("/finalizePurchase", function (request, response) {// Sends the email, clears cart, and then sends user to the thank you page
-   for(let prod_key in all_products){// deletes the cart
+app.post("/finalizePurchase", function (request, response) {// Sends the email, clears cart, and then sends user to the thank you page
+   shopping_cart = request.session.cart;
+   // removes purchased items from inventory
+   for (let prod_key in shopping_cart) {// Iterate through each city
+      let products = all_products[prod_key];
+      for(let i in shopping_cart[prod_key]){// Iterate through each product   
+         if (i.startsWith("quantity")) { // count the quantities
+            let purchased = shopping_cart[prod_key][i];
+            i = i.charAt(i.length - 1); // takes just the number from quantity
+            let available = products[i].aval;
+               available -= purchased;
+               products[i].aval = available;
+        } 
+      }
+   }
+   // deletes the quantities and favorites in cart
+   for(let prod_key in all_products){
       request.session.cart[prod_key] = {};
       for (let i in all_products[prod_key]){
          request.session.cart[prod_key]['quantity'+i] = 0;
          request.session.cart[prod_key]['favorite'+i] = 'off';
       }
    }  
+   // address cookie
+   let fullAddress = request.body.address1 + ' ' + request.body.address2;
+   response.cookie("address", fullAddress, {expire: Date.now() + 30 * 60 * 1000});// make an address cookie
       const nodemailer = require('nodemailer');
    // Set up mail server. Only will work on UH Network due to security restrictions
      let transporter = nodemailer.createTransport({

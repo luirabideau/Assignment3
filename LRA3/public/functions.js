@@ -26,8 +26,8 @@ function navBar(){// Makes a navbar
        <a href="./products.html?location=SanFran" class="w3-bar-item w3-button">San Francisco</a>
        <a href="./products.html?location=Chicago" class="w3-bar-item w3-button">Chicago</a>
        <a href="./team.html" class="w3-bar-item w3-button">Our Team</a>
-       <a href="#" class="w3-bar-item w3-button" onclick="logout()">Log Out</a>
-       <a href="./logout" class="w3-bar-item w3-button">${nameCookie}'s Cart: (${total}) items</a>
+       <a href="./logout" class="w3-bar-item w3-button" onclick="logout()">Log Out</a>
+       <a href="./shoppingCart.html" class="w3-bar-item w3-button">${nameCookie}'s Cart: (${total}) items</a>
      </div>
     </div>
    </div>
@@ -82,6 +82,7 @@ function logout() {// deletes the logged in cookie and reloads the page
   document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "totalIC=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie =  "address=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   // Reload the current page
   location.reload();
 }
@@ -147,9 +148,7 @@ function productsPageErrors(){// Interprets the errors from the query string and
     // intepretting the information given to us by the server
     let params = (new URL(document.location)).searchParams;
     // if the query string has Input, print the error and change the button
-    console.log(`No iNPUT1`);
     if ((params.get(`error`)) === `NoInput`) { 
-      console.log(`No iNPUT2`);
       document.getElementById(`leButton`).innerHTML = "No input: select some items to purchase";
     } else {
      for (let i in products) {
@@ -260,7 +259,6 @@ function generateCartTable(){// The generate item rows function in SHOPPINGCART_
 };
 
 function updateQuantity(location, productIndex){
-  console.log(location, productIndex, document.getElementById(`quantityTextbox${location}_${productIndex}`).value);
   // get the shopping cart data for this user
   loadJSON(`update_cart?location=${location}&productIndex=${productIndex}&value=${document.getElementById(`quantityTextbox${location}_${productIndex}`).value}`, function (response) {
   // Parsing JSON string into object

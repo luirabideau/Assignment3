@@ -11,9 +11,17 @@
 <!-- files needed to run the page (the CSS and favicon are included in the headDeclarations function) -->
 <script src="./functions.js"></script>
 <script>
-    faviconInfo();
-let cookieName = getCookie("name");//Function that gets name cookie
-let emailName = getCookie("username");//Function that gets name cookie
+  faviconInfo();
+// if the user is NOT logged in, will prompt user to do so. Forcefully.
+  let loggedIn = getCookie('loggedIn');
+  if (loggedIn != 1) {
+    console.log(loggedIn);
+    alert("Please Login First.");
+    window.location.href = "/login.html"; // redirect to an error page
+  }
+let cookieName = getCookie("name");
+let emailName = getCookie("username");
+let addressLines = getCookie("address");
 loadJSON('get_cart', function (response) {// get the shopping cart data for this user
   shopping_cart = JSON.parse(response);  // Parsing JSON string into object
   function countTotals(shopping_cart) {
@@ -54,7 +62,7 @@ setCookie("totalIC", totalInCart, 30)
             <script>
                 document.write(`
                 <p style="text-align: center">Your order is being processed!</p>
-                <p style="text-align: center">It will ship within 1-2 business days to: ADDRESS LINES.</p>
+                <p style="text-align: center">It will ship within 1-2 business days to: ${addressLines}.</p>
                 <p style="text-align: center">Check your ${emailName} inbox for the confirmation email.</p>`);  
             </script>
         </div>

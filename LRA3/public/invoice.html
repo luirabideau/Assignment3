@@ -14,12 +14,12 @@
 <link rel="stylesheet" href="./css/invoice.css">
 <script>faviconInfo()</script>
 <script>
-  if (!checkCookie('cfsc')) {
-    let what = checkCookie('cfsc');
-    console.log(`${what}`);
-    //alert("Please Login First.");
-    //window.location.href = "/login.html"; // redirect to an error page
-    console.log(`${'cfsc'}`);
+  // if the user is NOT logged in, will prompt user to do so. Forcefully.
+  let loggedIn = getCookie('loggedIn');
+  if (loggedIn != 1) {
+    console.log(loggedIn);
+    alert("Please Login First.");
+    window.location.href = "/login.html"; // redirect to an error page
   }
   let subtotal = 0;//Subtotal
   let cookieName = getCookie("name");//Function that gets name cookie
@@ -118,11 +118,11 @@ setCookie("totalIC", totalInCart, 30)
       <p>Girl math states that any subtotal under or equal to $100 is hereby 5% off</p>
 
       <p style="font-weight: bold;">SHIPPING INFORMATION:</p>
-      <form action="./finalizePurchase" method="get">
+      <form action="./finalizePurchase" method="post">
         <p><label for="address">Address Line 2:</label>
-          <input type="text" id="address1" name="address1" required></p>
+          <input type="text" name="address1" required></p>
         <p><label for="address">Address Line 2:</label>
-          <input type="text" id="address2" name="address2" required></p>
+          <input type="text" name="address2" required></p>
         <p><input type="submit" id="purchase" value="Purchase and Continue"></p>
       </form>
   </div>
