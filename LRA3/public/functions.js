@@ -14,6 +14,7 @@ function faviconInfo(){//contains favicon and css information
 function navBar(){// Makes a navbar
   let isloggedin = getCookie("loggedIn");
   let nameCookie = getCookie("name");
+  let total = getCookie("totalIC");
   if(isloggedin == 1){
     document.write(`
     <div class="w3-top">
@@ -26,7 +27,7 @@ function navBar(){// Makes a navbar
        <a href="./products.html?location=Chicago" class="w3-bar-item w3-button">Chicago</a>
        <a href="./team.html" class="w3-bar-item w3-button">Our Team</a>
        <a href="#" class="w3-bar-item w3-button" onclick="logout()">Log Out</a>
-       <a href="./shoppingCart.html" class="w3-bar-item w3-button">${nameCookie}'s Cart</a>
+       <a href="./shoppingCart.html" class="w3-bar-item w3-button">${nameCookie}'s Cart: (${total}) items</a>
      </div>
     </div>
    </div>
@@ -100,10 +101,10 @@ function loadJSON(service, callback) {
 }
 
 // Function to reload the page every second for 5 seconds
-function reloadPageFor2Seconds() {
+function reloadPageFor1Seconds() {
   let seconds = 0;
   const reloadInterval = setInterval(function () {
-      if (seconds < 2) {
+      if (seconds < 1) {
           location.reload();
           seconds++;
       } else {
@@ -116,21 +117,27 @@ function reloadPageFor2Seconds() {
 function productsTable(){// Function that generates the products on the products.html page
     for (let i in products){
       let a_qty = shopping_cart[prod_key][`quantity${i}`];
+      let fav = shopping_cart[prod_key][`favorite${i}`];
         document.write(`   
             <div class="product-item">
                 <img class="product-image" src="${products[i].image}">
                 <div class="product-title">${products[i].brand}</div>
                 <div class="product-description">${products[i].description}</div>
                 <span class="product-price">$${products[i].price}</span>
-                <lable>Favorite:</lable><input type="checkbox" id="favoriteCheckbox" name="favorite"> 
+                <lable>Favorite:</lable><input type="checkbox" id="checkbox${prod_key}_${i}" name="favorite${i}" onchange="updateFav('${prod_key}',${i});"> 
                 <div class="product-avaliability">Product Avaliability: ${products[i].aval}</div>
                 <label id="quantity${i}_label"}">Quantity:</label>
                 <div style="color: blue;" id="active_error${i}"></div>
-                <input type="number" id="textbox${prod_key}_${i}" name="quantity${i}";" onchange="updateQuantity('${prod_key}',${i});" value="${a_qty}" min="0">
+                <input type="number" id="textbox${prod_key}_${i}" name="quantity${i}" onchange="updateQuantity('${prod_key}',${i});" value="${a_qty}" min="0">
                 <span id="quantity${i}_cart_label"}">In cart: ${a_qty}</span> 
                <div style="color: red;" id="error_message${i}"></div>
             </div>
-        `)
+        `); 
+        if(fav == "on"){
+          document.getElementById(`checkbox${prod_key}_${i}`).checked = true;
+        } else {
+          document.getElementById(`checkbox${prod_key}_${i}`).checked = false;
+        }  
     };
 } 
 
@@ -172,7 +179,7 @@ function checkTextBox(){// Used in products.html to display the active errors in
       // getting the value from the textbox
       let textBoxValue = document.getElementById(`textbox${prod_key}_${i}`).value;
       // if the textboxvalue is 0 or nothing, return empty '', else if return whatever the error is, else return a "you want--"
-      if(textBoxValue === '' || textBoxValue == 0){
+      if(textBoxValue === '' || textBoxValue == 0 || textBoxValue == null){
         document.getElementById(`active_error${i}`).innerHTML = "";
       } else if (Number(textBoxValue) != textBoxValue){
         document.getElementById(`active_error${i}`).innerHTML = "Active Error: Not a number!";
@@ -229,18 +236,24 @@ function generateCartTable(){// The generate item rows function in SHOPPINGCART_
         if(a_qty == 0){//checks for quantities = 0
           continue;
         }else{
+        let fav = shopping_cart[prod_key][`favorite${i}`];
         // the div class id="pop up" is IR5
           document.write(`
             <tr style="height: 100px;">
               <td><div class="image-container"><img src="${products[i].image}" style="width: 100%; height: 100%;">              
               <div class="popup">${products[i].description}</div></div>
               </td>
-              <td><input id="cartFavorite" type="checkbox" value="This should have a placeholder value"></td>
+              <td><input type="checkbox" id="checkbox${prod_key}_${i}" name="favorite${i}" onchange="updateFav('${prod_key}',${i});"></td>
               <td>${products[i].brand}</td>
               <td><label>Edit:</label><input type="number" id="quantityTextbox${prod_key}_${i}" onchange="updateQuantity('${prod_key}',${i});" value="${a_qty}"></td>
               <td>$${products[i].price.toFixed(2)}</td>
               <td>$${extended_price.toFixed(2)}</td>
             </tr>`);
+            if(fav == "on"){
+              document.getElementById(`checkbox${prod_key}_${i}`).checked = true;
+            } else {
+              document.getElementById(`checkbox${prod_key}_${i}`).checked = false;
+            }  
         }
     }  
   };
@@ -252,7 +265,16 @@ function updateQuantity(location, productIndex){
   loadJSON(`update_cart?location=${location}&productIndex=${productIndex}&value=${document.getElementById(`quantityTextbox${location}_${productIndex}`).value}`, function (response) {
   // Parsing JSON string into object
   shopping_cart = JSON.parse(response);
-  reloadPageFor2Seconds();
+  reloadPageFor1Seconds();
+});
+}
+
+function updateFav(location, productIndex){
+  console.log(location, productIndex, document.getElementById(`checkbox${location}_${productIndex}`).value);
+  // get the shopping cart data for this user
+  loadJSON(`update_fav?location=${location}&productIndex=${productIndex}&value=${document.getElementById(`checkbox${location}_${productIndex}`).value}`, function (response) {
+  // Parsing JSON string into object
+  shopping_cart = JSON.parse(response);
 });
 }
 
@@ -271,12 +293,13 @@ function teamTable(){// Function that generates the professionals information on
 }
 
 /*----------------------------------------- COOKIE FUNCTIONs -------------------------------------------*/
- 
-function setCookie(name, value, daysToLive){// Function to set a cookie
-    var expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + daysToLive);
-    var cookie = name + "=" + encodeURIComponent(value) + "; expires=" + expirationDate.toUTCString() + "; path=/";
-    document.cookie = cookie;
+
+// taken from ChatGPT with the prompt "make me a function that makes cookies that last for 30 minutes"
+function setCookie(name, value, minutesToExpire) {// Function to set a cookie with a specified expiration time
+  const expirationDate = new Date();
+  expirationDate.setTime(expirationDate.getTime() + (minutesToExpire * 60 * 1000));
+  const cookieString = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
+  document.cookie = cookieString;
 }
 // Example: Set a cookie named "username" with the value "John Doe" that expires in 7 days
 // setCookie("username", "John Doe", 7);
@@ -302,9 +325,5 @@ function checkCookie(cookieName) {// Function to check if a cookie exists
   }
   return false; // Cookie not found
 }
-
-// Example: Get the value of the "username" cookie
-//var username = getCookie("username");
-//console.log("Username: " + username);
 
 /*------------------------------------------------------------------------------------------------------*/

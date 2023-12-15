@@ -41,6 +41,7 @@ app.all('*', function (request, response, next){
            request.session.cart[prod_key] = {};
            for (let i in all_products[prod_key]){
               request.session.cart[prod_key]['quantity'+i] = 0;
+              request.session.cart[prod_key]['favorite'+i] = 'off';
            }
         }
      }
@@ -89,8 +90,8 @@ app.post('/get_cart', function(request, response, next){
     response.send(JSON.stringify(request.session.cart));
 });
 
-// sending back the cart 
-app.post('/update_cart', function(request, response, next){
+
+app.post('/update_cart', function(request, response, next){// updating the cart 
    console.log(request.query);
    // update the cart for this item
    request.session.cart[request.query.location][`quantity${request.query.productIndex}`] = Number(request.query.value);
@@ -99,6 +100,22 @@ app.post('/update_cart', function(request, response, next){
    // turning the cart into a JSON string and sending it
    response.send(JSON.stringify(request.session.cart));
 });
+
+// sending back the cart 
+app.post('/update_fav', function(request, response, next){// updating the favs
+   console.log(request.query);
+   // update the cart for this item
+   if(request.session.cart[request.query.location][`favorite${request.query.productIndex}`] == 'on'){
+      request.session.cart[request.query.location][`favorite${request.query.productIndex}`] = "off";
+   } else {
+   request.session.cart[request.query.location][`favorite${request.query.productIndex}`] = request.query.value;
+   }
+   // the response will be json
+   response.type('json');
+   // turning the cart into a JSON string and sending it
+   response.send(JSON.stringify(request.session.cart));
+});
+
 // ----------------- General Routing End ---------------- //
 
 // --- Route all other requests to files in public -- //
@@ -167,6 +184,7 @@ app.post('/add_to_cart', function (request, response, next){// process purchase 
             request.session.cart[prod_key] = {};
          }
          for (let i in products) {
+            //request.session.cart[prod_key][`favorite${i}`] = request.body[`favorite`];
             if (typeof request.session.cart[prod_key][`quantity${i}`] != 'undefined') {
                request.session.cart[prod_key][`quantity${i}`] = 0;
             }
@@ -177,10 +195,18 @@ app.post('/add_to_cart', function (request, response, next){// process purchase 
       }
       // if invalid, redisplay products but with errors
       else{ 
-         response.redirect(`./products.html?location=${prod_key}&${querystring.stringify(errors)}`);
-         
+         response.redirect(`./products.html?location=${prod_key}&${querystring.stringify(errors)}`);  
       }
  //  }
+});
+
+app.post('/cartPage', function (request, response){// Sends to cart if logged in, sends to login if not
+   let isloggedin = request.body['loggedIn'];
+   if(isloggedin == '1'){
+      response.redirect(`/shoppingCart.html`);
+   } else { // else the user does not exist 
+      response.redirect(`/login.html`);
+   }
 });
 
 app.post('/login', function (request, response){// Validates a users login, and redirects page to the page if invalid and to cart if valid

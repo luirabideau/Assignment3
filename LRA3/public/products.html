@@ -31,15 +31,22 @@ let params = (new URL(document.location)).searchParams;
 <br><br><br><br>
 <div class="container">
     <h2 id="headingName"></h2>  
+    <div class="button-container" style="justify-content: center;">
+        <button type="submit" name="add_to_cart" form="add_to_cart">add items to cart</button>
+        <button type="submit" form="cartPage">go to shopping cart</button> 
+    </div>
     <!-- Checkout Form Begin -->  
-    <form action="/shoppingCart.html" method="GET" name="cart">
-      <p style="text-align: center;"><button type="submit">checkout</button></p>
+    <form action="./cartPage" method="POST" id="cartPage">
+      <script>
+        let isloggedin = getCookie("loggedIn");
+        document.write(`<input type="hidden" name="loggedIn" value="${isloggedin}">`);
+    </script>
+      
     </form>
     <!-- Checkout Form End -->
     <!-- Add to Cart Form Begin -->
-    <form action="./add_to_cart" method="POST" name="purchase_form">
+    <form action="./add_to_cart" method="POST" name="purchase_form" id="add_to_cart">
         <p id="leButton" style="color: red; text-align: center;"></p>
-        <span style="text-align: center;"><button type="submit" name="add_to_cart">add items to cart</button></span>
         <!-- Generates the products -->
         <div class="product">
             <script>

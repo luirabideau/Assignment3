@@ -16,6 +16,26 @@
     /*overflow-y: auto; /* Enable scrolling for the sidebar content */
     /*border-right: 1px solid #ccc; /* Optional: Add a border for separation */
 /*}*/
+button {
+    background-color: #4CAF50; 
+    color: white;          
+    padding: 10px 20px;   
+    font-size: 16px;         
+    border: none;           
+    border-radius: 5px;       
+    cursor: pointer;          
+    transition: background-color 0.3s ease; 
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.button-container {
+    display: flex;
+    gap: 50px; /* Adjust the gap as needed */
+}
+
 .content {
     padding: 20px;
 }
