@@ -126,7 +126,7 @@ function productsTable(){// Function that generates the products on the products
                 <div class="product-avaliability">Product Avaliability: ${products[i].aval}</div>
                 <label id="quantity${i}_label"}">Quantity:</label>
                 <div style="color: blue;" id="active_error${i}"></div>
-                <input type="number" id="textbox${prod_key}_${i}" name="quantity${i}";" onchange="updateQuantity('${prod_key}',${i});" value="${a_qty}">
+                <input type="number" id="textbox${prod_key}_${i}" name="quantity${i}";" onchange="updateQuantity('${prod_key}',${i});" value="${a_qty}" min="0">
                 <span id="quantity${i}_cart_label"}">In cart: ${a_qty}</span> 
                <div style="color: red;" id="error_message${i}"></div>
             </div>
