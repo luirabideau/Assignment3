@@ -25,11 +25,26 @@
   let cookieName = getCookie("name");//Function that gets name cookie
   let cookieEmail = getCookie("username");//Function that gets email cookie
   let date = getCurrentDate();// Function to get the current date in the format YYYY-MM-DD
-     // get the shopping cart data for this user
-  loadJSON('get_cart', function (response) {
-            // Parsing JSON string into object
-            shopping_cart = JSON.parse(response);
-        });
+loadJSON('get_cart', function (response) {// get the shopping cart data for this user
+  shopping_cart = JSON.parse(response);  // Parsing JSON string into object
+  function countTotals(shopping_cart) {
+    let counts = 0;// Initialize a counter for favorites
+    for (let prod_key in shopping_cart) {// Iterate through each city
+      let city = shopping_cart[prod_key]
+      for(let i in shopping_cart[prod_key]){// Iterate through each product
+        if (i.startsWith("quantity")) { // count the quantities
+          let num = 0;
+          num = shopping_cart[prod_key][i];
+          counts = counts + num;
+        }
+      }
+    }
+    return counts;
+  }
+const totalInCart = countTotals(shopping_cart);
+console.log(totalInCart);
+setCookie("totalIC", totalInCart, 30)
+});
 </script>
 </head>
 <body>

@@ -26,7 +26,7 @@
 let subtotal = 0;//Subtotal  
 loadJSON('get_cart', function (response) {// get the shopping cart data for this user
   shopping_cart = JSON.parse(response);  // Parsing JSON string into object
-  function countFavorites(shopping_cart) {
+  function countTotals(shopping_cart) {
     let counts = 0;// Initialize a counter for favorites
     for (let prod_key in shopping_cart) {// Iterate through each city
       let city = shopping_cart[prod_key]
@@ -40,7 +40,7 @@ loadJSON('get_cart', function (response) {// get the shopping cart data for this
     }
     return counts;
   }
-const totalInCart = countFavorites(shopping_cart);
+const totalInCart = countTotals(shopping_cart);
 console.log(totalInCart);
 setCookie("totalIC", totalInCart, 30)
 });
@@ -87,6 +87,7 @@ setCookie("totalIC", totalInCart, 30)
   <!-- table end -->
   </div>
   <p><form action="./processToInvoice" method="post">
+    
     <input type="submit" id="invoice" value="Checkout">
   </form></p>
 </div>  

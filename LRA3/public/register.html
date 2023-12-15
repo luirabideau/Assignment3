@@ -39,6 +39,10 @@
         </p>
         <!-- form submit -->
         <p style="text-align: center;"><button type="submit">Login</button></p>
+        <script>
+            let inCart = getCookie("totalIC");
+            document.write(`<input type="hidden" name="total" value="${inCart}">`);
+        </script>
     </form>
 </div>
 </body>

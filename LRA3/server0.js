@@ -32,7 +32,7 @@ if (fs.existsSync(user_data_filename)){
 app.use(express.urlencoded({ extended: true })); // express decodes URL encoded data in the body
 // ---------------- General Routing Begin --------------- //
 // monitor all requests
-app.all('*', function (request, response, next){
+app.all('*', function (request, response, next){// this function also makes the cart
    console.log(request.method + ' to ' + request.path);
       // gives the user a cart if the user does not have one
       if (typeof request.session.cart == 'undefined'){
@@ -220,7 +220,12 @@ app.post('/login', function (request, response){// Validates a users login, and 
           response.cookie("name", user_reg_data[the_username].name, {expire: Date.now() + 30 * 60 * 1000});// make a name cookie
           response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
           userLoggedin[the_username] = true;
-          response.redirect(`./shoppingCart.html`);
+          let cartCookie = Number(request.body.total);
+          if(cartCookie == 0) {
+            response.redirect(`./index.html`)
+          } else {
+            response.redirect(`./shoppingCart.html`);
+          }
        } else {
           response.redirect(`./login.html?passwordError`)
        }
@@ -234,27 +239,40 @@ app.post('/register', function (request, response){// Makes a new user while val
     user_reg_data[username] = {};
     user_reg_data[username].password = request.body.password;
     user_reg_data[username].username = request.body.username;  
+    let fullName; 
+    user_reg_data[username].name = request.body.firstname + ' ' + request.body.lastname;
     // add it to the user_data.json
     fs.writeFileSync(user_data_filename, JSON.stringify(user_reg_data));
     if(typeof user_reg_data[username] !== 'undefined' && typeof user_reg_data[username].password !== 'undefined' && typeof user_reg_data[username].username !== 'undefined'){
        // add new logged in user, place above the redirect
        userLoggedin[username] = true; 
-       response.redirect(`./shoppingCart.html`);   
+       response.cookie("username", username, {expire: Date.now() + 30 * 60 * 1000});// send a username cookie to indicate logged in
+       response.cookie("name", user_reg_data[username].name, {expire: Date.now() + 30 * 60 * 1000});// make a name cookie
+       response.cookie("loggedIn", 1, {expire: Date.now() + 30 * 60 * 1000});// make a logged in cookie
+       let cartCookie = Number(request.body.total);
+          if(cartCookie == 0) {
+            response.redirect(`./index.html`)
+          } else {
+            response.redirect(`./shoppingCart.html`);
+          }  
     } else {
        response.redirect(`./register.html`)
     }
 });  
 
 app.post('/processToInvoice', function (request, response){// Validates that at least 1 item is being bought, and then sends user to the invoice page if they are logged in
-//      response.cookie("cfsc", 1, {expire: Date.now() + 30 * 60 * 1000});// make a came-from-shopping-cart cookie
+
       response.redirect(`./invoice.html`);
 });
 
-//app.post('/finalizePurchase', function (request, response){// Sends the email and then sends user to the thank you page
-//   response.redirect(`./thankYou.html`);
-//});
-
-app.get("/finalizePurchase", function (request, response) {
+app.get("/finalizePurchase", function (request, response) {// Sends the email, clears cart, and then sends user to the thank you page
+   for(let prod_key in all_products){// deletes the cart
+      request.session.cart[prod_key] = {};
+      for (let i in all_products[prod_key]){
+         request.session.cart[prod_key]['quantity'+i] = 0;
+         request.session.cart[prod_key]['favorite'+i] = 'off';
+      }
+   }  
       const nodemailer = require('nodemailer');
    // Set up mail server. Only will work on UH Network due to security restrictions
      let transporter = nodemailer.createTransport({
@@ -283,5 +301,17 @@ app.get("/finalizePurchase", function (request, response) {
       }
       });
    response.redirect(`./thankYou.html`);
+});
+
+app.get('/logout', function (request, response){// Makes a new user while validating that info, then sends the new user to the shopping cart
+   for(let prod_key in all_products){// deletes the cart
+      request.session.cart[prod_key] = {};
+      for (let i in all_products[prod_key]){
+         request.session.cart[prod_key]['quantity'+i] = 0;
+         request.session.cart[prod_key]['favorite'+i] = 'off';
+      }
+   }
+   //redirects user
+   response.redirect(`./index.html`)
 });
 // ----------------- Sepcific Routing End --------------- //

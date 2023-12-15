@@ -15,8 +15,24 @@
 <script>faviconInfo()</script>
 <script>
 loadJSON('get_cart', function (response) {// get the shopping cart data for this user
-  // Parsing JSON string into object
-  shopping_cart = JSON.parse(response);
+  shopping_cart = JSON.parse(response);  // Parsing JSON string into object
+  function countTotals(shopping_cart) {
+    let counts = 0;// Initialize a counter for favorites
+    for (let prod_key in shopping_cart) {// Iterate through each city
+      let city = shopping_cart[prod_key]
+      for(let i in shopping_cart[prod_key]){// Iterate through each product
+        if (i.startsWith("quantity")) { // count the quantities
+          let num = 0;
+          num = shopping_cart[prod_key][i];
+          counts = counts + num;
+        }
+      }
+    }
+    return counts;
+  }
+const totalInCart = countTotals(shopping_cart);
+console.log(totalInCart);
+setCookie("totalIC", totalInCart, 30)
 });
 let params = (new URL(document.location)).searchParams;
     let prod_key;
@@ -41,7 +57,6 @@ let params = (new URL(document.location)).searchParams;
         let isloggedin = getCookie("loggedIn");
         document.write(`<input type="hidden" name="loggedIn" value="${isloggedin}">`);
     </script>
-      
     </form>
     <!-- Checkout Form End -->
     <!-- Add to Cart Form Begin -->

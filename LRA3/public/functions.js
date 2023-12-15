@@ -27,7 +27,7 @@ function navBar(){// Makes a navbar
        <a href="./products.html?location=Chicago" class="w3-bar-item w3-button">Chicago</a>
        <a href="./team.html" class="w3-bar-item w3-button">Our Team</a>
        <a href="#" class="w3-bar-item w3-button" onclick="logout()">Log Out</a>
-       <a href="./shoppingCart.html" class="w3-bar-item w3-button">${nameCookie}'s Cart: (${total}) items</a>
+       <a href="./logout" class="w3-bar-item w3-button">${nameCookie}'s Cart: (${total}) items</a>
      </div>
     </div>
    </div>
@@ -81,7 +81,7 @@ function logout() {// deletes the logged in cookie and reloads the page
   document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  document.cookie = "cfsc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie = "totalIC=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   // Reload the current page
   location.reload();
 }

@@ -12,13 +12,28 @@
 <script src="./functions.js"></script>
 <script>
     faviconInfo();
-  let hasCookie = getCookie("invoice");
-  //if (!checkCookie(hasCookie)) {
-  //  alert("Please Login First.");
-  //  window.location.href = "/login.html"; // redirect to an error page
-  //}
-    let cookieName = getCookie("name");//Function that gets name cookie
-    let emailName = getCookie("username");//Function that gets name cookie
+let cookieName = getCookie("name");//Function that gets name cookie
+let emailName = getCookie("username");//Function that gets name cookie
+loadJSON('get_cart', function (response) {// get the shopping cart data for this user
+  shopping_cart = JSON.parse(response);  // Parsing JSON string into object
+  function countTotals(shopping_cart) {
+    let counts = 0;// Initialize a counter for favorites
+    for (let prod_key in shopping_cart) {// Iterate through each city
+      let city = shopping_cart[prod_key]
+      for(let i in shopping_cart[prod_key]){// Iterate through each product
+        if (i.startsWith("quantity")) { // count the quantities
+          let num = 0;
+          num = shopping_cart[prod_key][i];
+          counts = counts + num;
+        }
+      }
+    }
+    return counts;
+  }
+const totalInCart = countTotals(shopping_cart);
+console.log(totalInCart);
+setCookie("totalIC", totalInCart, 30)
+});
 </script>
 </head>
 <body>
@@ -44,13 +59,8 @@
             </script>
         </div>
         <div class="button-container" style="justify-content: center;">
-            <button>Logout</button>
-            <button>Continue Shopping</button>
+            <form method="get" action="./logout"><button type="submit" onclick="logout();">Logout</button></form>
         </div>
     </div>
 </body>
-<script>
-   // document.cookie = "cfsc=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-   // document.cookie = "invoice=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-</script>
 </html>
