@@ -6,7 +6,7 @@
 function faviconInfo(){//contains favicon and css information
     document.write(`
       <link rel="stylesheet" href="./css/home.css">
-      <link rel="icon" href="./images/letterR.png" type="image/png">
+      <link rel="icon" href="./images/letterR.ico" type="image/x-icon">
       <link rel="shortcut icon" href="./images/letterR.png" type="image/png">
     `)
 }
