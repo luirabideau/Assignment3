@@ -314,7 +314,7 @@ app.post("/finalizePurchase", function (request, response) {// Sends the email, 
    response.redirect(`./thankYou.html`);
 });
 
-app.get('/logout', function (request, response){// Makes a new user while validating that info, then sends the new user to the shopping cart
+app.get('/logout', function (request, response){
    for(let prod_key in all_products){// deletes the cart
       request.session.cart[prod_key] = {};
       for (let i in all_products[prod_key]){
